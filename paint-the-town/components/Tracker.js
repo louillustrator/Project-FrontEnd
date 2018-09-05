@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Dimensions, StatusBarIOS } from "react-native";
+import { StyleSheet, Text, View, Dimensions, Platform } from "react-native";
 import { Constants, Location, Permissions, MapView } from "expo";
 import pick from "lodash/pick";
 
@@ -17,12 +17,44 @@ class Tracker extends Component {
     errorMessage: null,
     route: null
   };
-  componentWillMount() {
-    this._getLocationAsync();
-    this._watchPosition();
-    // .catch(console.log);
+  //did mount please
+  componentDidMount() {
+    this._getLocationAsync().then(
+      Permissions.askAsync(Permissions.LOCATION)
+        .then(response => {
+          if (response.status === "granted") {
+            console.log("Starting watchPositionAsync");
+            this.watchId = Location.watchPositionAsync(
+              {
+                enableHighAccuracy: true,
+                distanceInterval: 1,
+                timeInterval: 1
+              },
+              newLoc => {
+                if (newLoc.timestamp) {
+                  console.log(newLoc);
+                } else {
+                  console.log("ignored newLoc");
+                }
+              }
+            );
+          } else {
+            console.log(
+              "Error in getLocationAsync: Permission to access location was denied"
+            );
+          }
+        })
+        .catch(error =>
+          console.log("Error in componentWillMount: ", error.message)
+        )
+        .done()
+    );
+
+    // this._watchPosition();
   }
+
   _getLocationAsync = async () => {
+    console.log("getting current location");
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
     if (status !== "granted") {
@@ -44,21 +76,24 @@ class Tracker extends Component {
 
   //get postion in motion, update the state, and hopefully rerender each time :)
 
-  _watchPosition = async () => {
-    console.warn("watching you");
-    await Location.watchPositionAsync(
-      { enableHighAccuracy: true, timeInterval: 100, distanceInterval: 2 },
-      result => {
-        console.warn("made it down", result);
-        this.setState({
-          route: { ...result }
-        });
-      }
-    );
-  };
+  //   _watchPosition = () => {
+  //     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+  //     if (status !== "granted") {
+  //     console.log("watching you");
+  //     Location.watchPositionAsync(
+  //       { enableHighAccuracy: true, timeInterval: 1, distanceInterval: 1 },
+  //       result => {
+  //         if (result.timestamp) {
+  //           console.log(result + "I'm a result");
+  //         } else {
+  //           console.log("no results");
+  //         }
+  //       }
+  //     );
+  //   }
+  // };
 
   render() {
-    console.warn(this.state.route);
     return (
       <View style={styles.container}>
         <MapView
