@@ -15,12 +15,12 @@ class Tracker extends Component {
     },
     location: null,
     errorMessage: null,
-    routeCoordinates: [],
-    distanceTravelled: 0,
-    prevLatLng: {}
+    route: null
   };
   componentWillMount() {
     this._getLocationAsync();
+    this._watchPosition();
+    // .catch(console.log);
   }
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -42,7 +42,23 @@ class Tracker extends Component {
     });
   };
 
+  //get postion in motion, update the state, and hopefully rerender each time :)
+
+  _watchPosition = async () => {
+    console.warn("watching you");
+    await Location.watchPositionAsync(
+      { enableHighAccuracy: true, timeInterval: 100, distanceInterval: 2 },
+      result => {
+        console.warn("made it down", result);
+        this.setState({
+          route: { ...result }
+        });
+      }
+    );
+  };
+
   render() {
+    console.warn(this.state.route);
     return (
       <View style={styles.container}>
         <MapView
