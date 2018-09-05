@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Dimensions, StatusBarIOS } from "react-native";
 import { Constants, Location, Permissions, MapView } from "expo";
+import pick from "lodash/pick";
+
+const { width, height } = Dimensions.get("window");
 
 class Tracker extends Component {
   state = {
@@ -11,12 +14,14 @@ class Tracker extends Component {
       longitudeDelta: 0.01
     },
     location: null,
-    errorMessage: null
+    errorMessage: null,
+    routeCoordinates: [],
+    distanceTravelled: 0,
+    prevLatLng: {}
   };
   componentWillMount() {
     this._getLocationAsync();
   }
-
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
@@ -38,30 +43,52 @@ class Tracker extends Component {
   };
 
   render() {
-    let text = "Waiting..";
-    if (this.state.errorMessage) {
-      text = this.state.errorMessage;
-    } else if (this.state.location) {
-      text = JSON.stringify(this.state.location);
-    }
     return (
-      <MapView
-        style={styles.container}
-        region={this.state.region}
-        showsUserLocation
-        showsMyLocationButton
-        followUserLocation={true}
-        zoomEnabled={true}
-      />
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          region={this.state.region}
+          showsUserLocation
+          showsMyLocationButton
+          followUserLocation={true}
+          zoomEnabled={true}
+        />
+        <View style={styles.navBar}>
+          <Text style={styles.navBarText}>Run for it</Text>
+        </View>
+      </View>
     );
   }
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "center"
+    backgroundColor: "#F5FCFF"
+  },
+  navBar: {
+    backgroundColor: "rgba(0,0,0,0.7)",
+    height: 64,
+    width: width,
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  },
+  navBarText: {
+    color: "#19B5FE",
+    fontSize: 16,
+    fontWeight: "700",
+    textAlign: "center",
+    paddingTop: 30
+  },
+  map: {
+    flex: 0.7,
+    width: width,
+    height: height
   }
 });
 
