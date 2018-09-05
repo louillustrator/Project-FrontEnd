@@ -13,59 +13,31 @@ class Tracker extends Component {
       latitudeDelta: 0.01,
       longitudeDelta: 0.01
     },
-    location: null,
-    errorMessage: null,
-    route: null
-  };
-  //did mount please
-  componentDidMount() {
-    this._getLocationAsync().then(
-      Permissions.askAsync(Permissions.LOCATION)
-        .then(response => {
-          if (response.status === "granted") {
-            console.log("Starting watchPositionAsync");
-            this.watchId = Location.watchPositionAsync(
-              {
-                enableHighAccuracy: true,
-                distanceInterval: 1,
-                timeInterval: 1
-              },
-              newLoc => {
-                if (newLoc.timestamp) {
-                  console.log(newLoc);
-                } else {
-                  console.log("ignored newLoc");
-                }
-              }
-            );
-          } else {
-            console.log(
-              "Error in getLocationAsync: Permission to access location was denied"
-            );
-          }
-        })
-        .catch(error =>
-          console.log("Error in componentWillMount: ", error.message)
-        )
-        .done()
-    );
 
-    // this._watchPosition();
+    errorMessage: null,
+    route: [],
+    status: null,
+    watching: false
+  };
+
+  componentDidMount() {
+    this._getLocationAsync();
   }
 
+  //getting current postion and setting state with it
   _getLocationAsync = async () => {
-    console.log("getting current location");
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
-
     if (status !== "granted") {
       this.setState({
         errorMessage: "Permission to access location was denied"
       });
     }
-    let location = await Location.getCurrentPositionAsync({});
+    let location = await Location.getCurrentPositionAsync({
+      enableHighAccuracy: true
+    });
 
     this.setState({
-      location,
+      status: "granted",
       region: {
         ...this.state.region,
         latitude: location.coords.latitude,
@@ -74,26 +46,42 @@ class Tracker extends Component {
     });
   };
 
-  //get postion in motion, update the state, and hopefully rerender each time :)
+  //bringing back postion tracking.
 
-  //   _watchPosition = () => {
-  //     let { status } = await Permissions.askAsync(Permissions.LOCATION);
-  //     if (status !== "granted") {
-  //     console.log("watching you");
-  //     Location.watchPositionAsync(
-  //       { enableHighAccuracy: true, timeInterval: 1, distanceInterval: 1 },
-  //       result => {
-  //         if (result.timestamp) {
-  //           console.log(result + "I'm a result");
-  //         } else {
-  //           console.log("no results");
-  //         }
-  //       }
-  //     );
-  //   }
-  // };
+  _watchPosition = () => {
+    console.log("watching");
+    Permissions.askAsync(Permissions.LOCATION)
+      .then(res => {
+        if (res.status === "granted") {
+          this.watchId = Location.watchPositionAsync(
+            {
+              enableHighAccuracy: true,
+              distanceInterval: 2,
+              timeInterval: 2000
+            },
+            newLocation => {
+              if (newLocation.timestamp) {
+                let object = {
+                  latitude: newLocation.coords.latitude,
+                  longitude: newLocation.coords.longitude,
+                  timestamp: newLocation.timestamp
+                };
+
+                this.setState({
+                  route: [...this.state.route, object]
+                });
+              } else {
+                console.log("ignored newLocation");
+              }
+            }
+          );
+        }
+      })
+      .catch(err => console.log("Error in componentDidMount: ", err.message));
+  };
 
   render() {
+    console.log(this.state);
     return (
       <View style={styles.container}>
         <MapView
@@ -104,11 +92,26 @@ class Tracker extends Component {
           followUserLocation={true}
           zoomEnabled={true}
         />
+
         <View style={styles.navBar}>
           <Text style={styles.navBarText}>Run for it</Text>
         </View>
       </View>
     );
+  }
+
+  componentDidUpdate() {
+    if (
+      this.state.status === "granted" &&
+      !this.state.watching
+
+      //this might want to happen on a button press/ so to start your tracking....
+    ) {
+      this._watchPosition();
+      this.setState({
+        watching: true
+      });
+    }
   }
 }
 
