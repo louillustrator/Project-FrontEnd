@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { Button, StyleSheet, Text, View, Dimensions } from "react-native";
 import { Location, Permissions, MapView } from "expo";
 
 const { width, height } = Dimensions.get("window");
@@ -12,11 +12,11 @@ class Tracker extends Component {
       latitudeDelta: 0.01,
       longitudeDelta: 0.01
     },
-
     errorMessage: null,
     route: [],
     status: null,
-    watching: false
+    watching: false,
+    colour: '#3600ff'
   };
   //getting current user postion at the start and setting region in state with it
   componentDidMount() {
@@ -95,6 +95,15 @@ class Tracker extends Component {
         <View style={styles.navBar}>
           <Text style={styles.navBarText}>Run for it</Text>
         </View>
+        <Button
+                title="Pick a colour"
+                accessibilityLabel={"Pick Colour"}
+                color={this.state.colour}
+                onPress={() => this.props.navigation.navigate("ColourPicker", {
+                  currentColour: this.state.colour,
+                  changeColour: this.changeColour
+                })}
+            />
       </View>
     );
   }
@@ -113,6 +122,12 @@ class Tracker extends Component {
       });
     }
   }
+  changeColour = (colour) => {
+    this.setState({
+        colour
+    });
+    this.props.navigation.navigate("Tracker");
+};
 }
 
 const styles = StyleSheet.create({
