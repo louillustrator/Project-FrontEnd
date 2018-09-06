@@ -16,6 +16,12 @@ class HomeScreen extends React.Component {
           color={"#786fa6"}
           onPress={() => this.props.navigation.navigate("Tracker")}
         />
+        <Button
+          title={"Pick Colour"}
+          accessibilityLabel={"Pick Colour"}
+          color={"#786fa6"}
+          onPress={() => this.props.navigation.navigate("ColourPicker")}
+        />
       </View>
     );
   }

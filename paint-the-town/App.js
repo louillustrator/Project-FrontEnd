@@ -4,6 +4,7 @@ import { createStackNavigator } from "react-navigation";
 import HomeScreen from "./components/HomeScreen";
 import Tracker from "./components/Tracker";
 import Collection from "./components/Collection";
+import ColourPicker from "./components/ColourPicker";
 
 export default class App extends React.Component {
   render() {
@@ -24,7 +25,8 @@ const RootStack = createStackNavigator(
   {
     Home: HomeScreen,
     Tracker: Tracker,
-    Collection: Collection
+    Collection: Collection,
+    ColourPicker: ColourPicker
   },
   {
     intialRouteName: "Home"
