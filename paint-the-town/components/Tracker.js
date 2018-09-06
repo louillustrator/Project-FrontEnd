@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Dimensions, Platform } from "react-native";
-import { Constants, Location, Permissions, MapView } from "expo";
-import pick from "lodash/pick";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { Location, Permissions, MapView } from "expo";
 
 const { width, height } = Dimensions.get("window");
 
@@ -19,12 +18,11 @@ class Tracker extends Component {
     status: null,
     watching: false
   };
-
+  //getting current user postion at the start and setting region in state with it
   componentDidMount() {
     this._getLocationAsync();
   }
 
-  //getting current postion and setting state with it
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== "granted") {
@@ -46,10 +44,10 @@ class Tracker extends Component {
     });
   };
 
-  //bringing back postion tracking.
+  //bringing back postion tracking, this is setting route in state with an object containing longitude and latitude & a timestamp
+  //this is started in component did update down below
 
   _watchPosition = () => {
-    console.log("watching");
     Permissions.askAsync(Permissions.LOCATION)
       .then(res => {
         if (res.status === "granted") {
@@ -80,8 +78,9 @@ class Tracker extends Component {
       .catch(err => console.log("Error in componentDidMount: ", err.message));
   };
 
+  //rendering the view, currently holding map and a nav bar
   render() {
-    console.log(this.state);
+    // console.log(this.state); <---un comment this to see the state updating when tracking
     return (
       <View style={styles.container}>
         <MapView
@@ -100,6 +99,7 @@ class Tracker extends Component {
     );
   }
 
+  //tracking is starting
   componentDidUpdate() {
     if (
       this.state.status === "granted" &&
