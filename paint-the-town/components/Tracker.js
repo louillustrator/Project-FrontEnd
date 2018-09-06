@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, StyleSheet, Text, View, Dimensions } from "react-native";
 import { Location, Permissions, MapView } from "expo";
+import ButtAction from "./ButtAction";
 
 const { width, height } = Dimensions.get("window");
 
@@ -91,11 +92,11 @@ class Tracker extends Component {
           followUserLocation={true}
           zoomEnabled={true}
         />
-
-        <View style={styles.navBar}>
+        <ButtAction style={styles.butt} changeColour={this.changeColour} navigation={this.props.navigation} colour={this.state.colour}/>
+        {/* <View style={styles.navBar}>
           <Text style={styles.navBarText}>Run for it</Text>
-        </View>
-        <Button
+        </View> */}
+        {/* <Button
                 title="Pick a colour"
                 accessibilityLabel={"Pick Colour"}
                 color={this.state.colour}
@@ -103,7 +104,7 @@ class Tracker extends Component {
                   currentColour: this.state.colour,
                   changeColour: this.changeColour
                 })}
-            />
+            /> */}
       </View>
     );
   }
@@ -158,6 +159,14 @@ const styles = StyleSheet.create({
     flex: 0.7,
     width: width,
     height: height
+  },
+  butt: {
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    top: 10,
+    left: 10,
+    zIndex: 10
   }
 });
 
