@@ -17,7 +17,15 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>Hi Louise!</Text>
+        <View style={styles.login}>
+          <Text >Hi {this.props.screenProps.currentUser}</Text>
+          <Button
+          title={"Log Out"}
+          accessibilityLabel={"Log Out"}
+          color={"#786fa6"}
+          onPress={this.logout}
+          />
+          </View>
         <Ionicons name="md-walk" size={100} color="white" />
 
         <TouchableHighlight
@@ -46,6 +54,10 @@ class HomeScreen extends React.Component {
       </View>
     );
   }
+  logout = () => {
+    this.props.screenProps.updateUser("");
+    this.props.navigation.navigate("LoginOut")
+  }
 }
 
 const styles = StyleSheet.create({
@@ -56,6 +68,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 20,
     backgroundColor: "#63cdda"
+  },
+  login: {
+    fontSize: 20,
+   alignSelf: "flex-end",
+   color: "white",
+   position: "absolute",
+   top: "2%",
+   right: "5%"
   },
   text: {
     fontSize: 20,
