@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, StyleSheet, Text, View, Dimensions } from "react-native";
 import { Location, Permissions, MapView } from "expo";
 import ButtAction from "./ButtAction";
+import { _haversine } from "../utils/Tracker";
 
 const { width, height } = Dimensions.get("window");
 
@@ -92,7 +93,7 @@ class Tracker extends Component {
           followUserLocation={true}
           zoomEnabled={true}
         />
-        <ButtAction style={styles.butt} changeColour={this.changeColour} navigation={this.props.navigation} colour={this.state.colour}/>
+        <ButtAction style={styles.butt} changeColour={this.changeColour} navigation={this.props.navigation} colour={this.state.colour} />
         {/* <View style={styles.navBar}>
           <Text style={styles.navBarText}>Run for it</Text>
         </View> */}
@@ -105,6 +106,7 @@ class Tracker extends Component {
                   changeColour: this.changeColour
                 })}
             /> */}
+        {/* <Text>{_haversine(this.state.route)}</Text> */}
       </View>
     );
   }
@@ -125,10 +127,10 @@ class Tracker extends Component {
   }
   changeColour = (colour) => {
     this.setState({
-        colour
+      colour
     });
     this.props.navigation.navigate("Tracker");
-};
+  };
 }
 
 const styles = StyleSheet.create({
