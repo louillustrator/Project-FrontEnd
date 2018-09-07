@@ -42,7 +42,7 @@ class LoginOut extends React.Component {
             if (this.state.allUsernames.length !== allUsernames.length) {
                 this.setState({
                     allUsernames
-                }, console.warn(allUsernames))
+                })
             } 
         })     
     };

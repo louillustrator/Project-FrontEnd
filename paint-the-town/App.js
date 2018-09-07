@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 import { createStackNavigator } from "react-navigation";
 import HomeScreen from "./components/HomeScreen";
 import Tracker from "./components/Tracker";
@@ -9,13 +9,25 @@ import LoginOut from "./components/LoginOut";
 
 export default class App extends React.Component {
   state = {
-    currentUser: "normanhaze"
+    currentUser: ""
   }
   render() {
     return <RootStack screenProps={{currentUser: this.state.currentUser, updateUser: this.updateUser}}/>;
   }
 
+  componentDidMount() {
+    return AsyncStorage.getItem("currentUser")
+    .then(currentUser => {
+      if (currentUser) {
+        this.setState({
+          currentUser
+        })
+      }
+    })
+  }
+
   updateUser = (currentUser) => {
+    AsyncStorage.setItem("currentUser", currentUser)
     this.setState({
       currentUser
     })
