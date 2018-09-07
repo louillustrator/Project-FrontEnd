@@ -15,10 +15,10 @@ class LoginOut extends React.Component {
     if (this.props.screenProps.currentUser) this.props.navigation.navigate("Home")
     return <View>
         <FormLabel>USERNAME</FormLabel>
-        <FormInput onChangeText={(text) => this.handleChange("username", text)}/>
+        <FormInput value={this.state.username} onChangeText={(text) => this.handleChange("username", text)}/>
         <FormValidationMessage>{this.state.usernameError}</FormValidationMessage>
         <FormLabel>PASSWORD</FormLabel>
-        <FormInput secureTextEntry={true} onChangeText={(text) => this.handleChange("password", text)}/>
+        <FormInput value={this.state.password} secureTextEntry={true} onChangeText={(text) => this.handleChange("password", text)}/>
         <FormValidationMessage>{this.state.passwordError}</FormValidationMessage>
         <Button
         disabled={!this.state.username || !this.state.password ? true : false}
@@ -26,17 +26,25 @@ class LoginOut extends React.Component {
         accessibilityLabel={"Login"}
         color={"#786fa6"}
         onPress={() => this.handleLogin()}/>
+        <Button
+        disabled={!this.state.username || !this.state.password ? true : false}
+        title={"Sign Up"}
+        accessibilityLabel={"Sign up"}
+        color={"#786fa6"}
+        onPress={() => this.handleSignUp()}/>
     </View>
         
     }
 
-    componentDidMount() {
+    componentDidUpdate() {
         api.getUsernames()
         .then(allUsernames => {
-            this.setState({
-                allUsernames
-            })
-        })
+            if (this.state.allUsernames.length !== allUsernames.length) {
+                this.setState({
+                    allUsernames
+                }, console.warn(allUsernames))
+            } 
+        })     
     };
 
     handleChange = (field, input) => {
@@ -73,6 +81,25 @@ class LoginOut extends React.Component {
         } else {
             this.setState({
                 usernameError: "Username not found!"
+            })
+        }
+    }
+    handleSignUp = () => {
+        if (this.state.allUsernames.includes(this.state.username.toLowerCase())) {
+            this.setState({
+                usernameError: "Username already exists!"
+            })
+        } else {
+            api.addUser(this.state.username.toLowerCase(), this.state.password)
+            .then(message => {
+                if (message === "OK") {
+                    this.props.screenProps.updateUser(this.state.username.toLowerCase());
+                    this.setState({
+                        username: "",
+                        password: ""
+                    })
+                    this.props.navigation.navigate("Home");
+                }
             })
         }
     }
