@@ -21,6 +21,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "expo": "^27.0.1",
+    "firebase": "^5.4.2",
     "haversine": "^1.1.0",
     "lodash": "^4.17.10",
     "react": "16.3.1",

@@ -6,6 +6,7 @@ import Tracker from "./components/Tracker";
 import Collection from "./components/Collection";
 import ColourPicker from "./components/ColourPicker";
 import LoginOut from "./components/LoginOut";
+import ImageFromCollection from "./components/ImageFromCollection";
 
 export default class App extends React.Component {
   state = {
@@ -50,6 +51,7 @@ const RootStack = createStackNavigator(
     Collection: Collection,
     ColourPicker: ColourPicker,
     LoginOut: LoginOut
+    ImageFromCollection: ImageFromCollection
   },
   {
     initialRouteName: "LoginOut"
