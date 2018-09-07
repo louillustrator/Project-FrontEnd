@@ -10,41 +10,30 @@ import {
 const { width, height } = Dimensions.get("window");
 
 class Collection extends Component {
+  state = {
+    images: [
+      "../testImages/image2.jpg",
+      "../testImages/image3.jpg",
+      "../testImages/image3.jpg",
+      "../testImages/image2.jpg",
+      "../testImages/image2.jpg",
+      "../testImages/image3.jpg",
+      "../testImages/image2.jpg"
+    ]
+  };
   render() {
     return (
       <View style={styles.view}>
         <Text style={styles.navBarText}>My Gallery</Text>
-
         <ScrollView contentContainerStyle={styles.container}>
-          <Image
-            style={styles.image}
-            source={require("../testImages/image2.jpg")}
-          />
-          <Image
-            style={styles.image}
-            source={require("../testImages/image3.jpg")}
-          />
-          <Image
-            style={styles.image}
-            source={require("../testImages/image3.jpg")}
-          />
-          <Image
-            style={styles.image}
-            source={require("../testImages/image2.jpg")}
-          />
-          <Image
-            style={styles.image}
-            source={require("../testImages/image2.jpg")}
-          />
-          <Image
-            style={styles.image}
-            source={require("../testImages/image3.jpg")}
-          />
-          <Image
-            style={styles.image}
-            source={require("../testImages/image2.jpg")}
-          />
+          {this.state.images.map(imageLink => {
+            console.log(imageLink);
+            return (
+              <Image style={styles.image} source={require(`${imageLink}`)} />
+            );
+          })}
         </ScrollView>
+        ;
       </View>
     );
   }
