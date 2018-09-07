@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { Button, StyleSheet, Text, View, Dimensions } from "react-native";
-import { Location, Permissions, MapView } from "expo";
+import { StyleSheet, View, Dimensions } from "react-native";
+import { MapView } from "expo";
 import ButtAction from "./ButtAction";
+import * as tracker from "../utils/Tracker";
+import Polylines from "./Polylines";
 
 const { width, height } = Dimensions.get("window");
 
@@ -14,7 +16,9 @@ class Tracker extends Component {
       longitudeDelta: 0.01
     },
     errorMessage: null,
-    route: [],
+    subscrition: {},
+    route: [{latLng:[], colour:"#3600ff", width:1}],
+    width: 1,
     status: null,
     watching: false,
     colour: '#3600ff'
@@ -24,64 +28,10 @@ class Tracker extends Component {
     this._getLocationAsync();
   }
 
-  _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== "granted") {
-      this.setState({
-        errorMessage: "Permission to access location was denied"
-      });
-    }
-    let location = await Location.getCurrentPositionAsync({
-      enableHighAccuracy: true
-    });
+  _getLocationAsync = tracker._getLocationAsync.bind(this)
+  _watchPosition = tracker._watchPosition.bind(this)
 
-    this.setState({
-      status: "granted",
-      region: {
-        ...this.state.region,
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude
-      }
-    });
-  };
-
-  //bringing back postion tracking, this is setting route in state with an object containing longitude and latitude & a timestamp
-  //this is started in component did update down below
-
-  _watchPosition = () => {
-    Permissions.askAsync(Permissions.LOCATION)
-      .then(res => {
-        if (res.status === "granted") {
-          this.watchId = Location.watchPositionAsync(
-            {
-              enableHighAccuracy: true,
-              distanceInterval: 2,
-              timeInterval: 2000
-            },
-            newLocation => {
-              if (newLocation.timestamp) {
-                let object = {
-                  latitude: newLocation.coords.latitude,
-                  longitude: newLocation.coords.longitude,
-                  timestamp: newLocation.timestamp
-                };
-
-                this.setState({
-                  route: [...this.state.route, object]
-                });
-              } else {
-                console.log("ignored newLocation");
-              }
-            }
-          );
-        }
-      })
-      .catch(err => console.log("Error in componentDidMount: ", err.message));
-  };
-
-  //rendering the view, currently holding map and a nav bar
   render() {
-    // console.log(this.state); <---un comment this to see the state updating when tracking
     return (
       <View style={styles.container}>
         <MapView
@@ -91,44 +41,56 @@ class Tracker extends Component {
           showsMyLocationButton
           followUserLocation={true}
           zoomEnabled={true}
-        />
-        <ButtAction style={styles.butt} changeColour={this.changeColour} navigation={this.props.navigation} colour={this.state.colour}/>
-        {/* <View style={styles.navBar}>
-          <Text style={styles.navBarText}>Run for it</Text>
-        </View> */}
-        {/* <Button
-                title="Pick a colour"
-                accessibilityLabel={"Pick Colour"}
-                color={this.state.colour}
-                onPress={() => this.props.navigation.navigate("ColourPicker", {
-                  currentColour: this.state.colour,
-                  changeColour: this.changeColour
-                })}
-            /> */}
+          onRegionChangeComplete={this.setZoom}
+        >
+        <Polylines route={this.state.route} />
+        </MapView>
+        <ButtAction style={styles.butt} changeColour={this.changeColour} navigation={this.props.navigation} colour={this.state.colour} start={this.start} pause={this.pause} stop={this.stop}/>
+        {/* <Text>{_haversine(this.state.route)}</Text> */}
       </View>
     );
   }
-
-  //tracking is starting
-  componentDidUpdate() {
-    if (
-      this.state.status === "granted" &&
-      !this.state.watching
-
-      //this might want to happen on a button press/ so to start your tracking....
-    ) {
-      this._watchPosition();
-      this.setState({
-        watching: true
-      });
-    }
-  }
+  
   changeColour = (colour) => {
+    let path = {latLng:[], colour, width: this.state.width}
     this.setState({
-        colour
+      route:[...this.state.route, path],
+      colour
     });
     this.props.navigation.navigate("Tracker");
-};
+  };
+
+  pause = () => {
+    this._watchPosition(0)
+    this.setState({
+      watching: false
+    })
+  }
+
+  start = () => {
+    this._watchPosition(1)
+    this.setState({
+      watching: true
+    })
+  }
+
+  stop = () => {
+    this._watchPosition(0)
+    this.setState({
+      watching: false
+    })
+  }
+
+  setZoom = (region) => {
+    let currentRegion = 
+      {...this.state.region, 
+          latitudeDelta: region.latitudeDelta, 
+          longitudeDelta: region.longitudeDelta
+      }
+    this.setState({
+      region: currentRegion
+    })
+  }
 }
 
 const styles = StyleSheet.create({
