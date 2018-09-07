@@ -30,12 +30,8 @@ class Tracker extends Component {
 
   _getLocationAsync = tracker._getLocationAsync.bind(this)
   _watchPosition = tracker._watchPosition.bind(this)
-  //bringing back postion tracking, this is setting route in state with an object containing longitude and latitude & a timestamp
-  //this is started in component did update down below
 
-  //rendering the view, currently holding map and a nav bar
   render() {
-    // console.log(this.state); <---un comment this to see the state updating when tracking
     return (
       <View style={styles.container}>
         <MapView
@@ -45,6 +41,7 @@ class Tracker extends Component {
           showsMyLocationButton
           followUserLocation={true}
           zoomEnabled={true}
+          onRegionChangeComplete={this.setZoom}
         >
         <Polylines route={this.state.route} />
         </MapView>
@@ -52,16 +49,6 @@ class Tracker extends Component {
         {/* <Text>{_haversine(this.state.route)}</Text> */}
       </View>
     );
-  }
-
-  //tracking is starting
-  componentDidUpdate() {
-    // if (
-    //   this.state.status === "granted" &&
-    //   !this.state.watching
-    // ) {
-    //   this._watchPosition();
-    // }
   }
   
   changeColour = (colour) => {
@@ -91,6 +78,17 @@ class Tracker extends Component {
     this._watchPosition(0)
     this.setState({
       watching: false
+    })
+  }
+
+  setZoom = (region) => {
+    let currentRegion = 
+      {...this.state.region, 
+          latitudeDelta: region.latitudeDelta, 
+          longitudeDelta: region.longitudeDelta
+      }
+    this.setState({
+      region: currentRegion
     })
   }
 }
