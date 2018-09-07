@@ -5,10 +5,20 @@ import HomeScreen from "./components/HomeScreen";
 import Tracker from "./components/Tracker";
 import Collection from "./components/Collection";
 import ColourPicker from "./components/ColourPicker";
+import LoginOut from "./components/LoginOut";
 
 export default class App extends React.Component {
+  state = {
+    currentUser: "normanhaze"
+  }
   render() {
-    return <RootStack />;
+    return <RootStack screenProps={{currentUser: this.state.currentUser, updateUser: this.updateUser}}/>;
+  }
+
+  updateUser = (currentUser) => {
+    this.setState({
+      currentUser
+    })
   }
 }
 
@@ -26,9 +36,10 @@ const RootStack = createStackNavigator(
     Home: HomeScreen,
     Tracker: Tracker,
     Collection: Collection,
-    ColourPicker: ColourPicker
+    ColourPicker: ColourPicker,
+    LoginOut: LoginOut
   },
   {
-    intialRouteName: "Home"
+    initialRouteName: "LoginOut"
   }
 );
