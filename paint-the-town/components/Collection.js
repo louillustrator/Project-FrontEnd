@@ -9,10 +9,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { _ } from "lodash";
-import ImageFromCollection from "./ImageFromCollection";
-import config from "../config";
-import firebase from "firebase";
-firebase.initializeApp(config);
+import * as api from "../api";
 
 class Collection extends Component {
   state = {
@@ -36,7 +33,7 @@ class Collection extends Component {
             {_.map(Object.values(this.state.images), imageLink => {
               return (
                 <TouchableOpacity
-                  key={imageLink._id}
+                  key={imageLink.id}
                   onPress={() =>
                     navigate("ImageFromCollection", { img: imageLink })
                   }
@@ -55,23 +52,19 @@ class Collection extends Component {
   }
   componentDidMount() {
     this.retrievePics().then(images => {
-      this.setState({ images });
+      //console.log(images);
+      this.setState({ images }, () =>
+        console.log(this.state.images, "£££££££")
+      );
     });
   }
 
   retrievePics = async () => {
     //we will need to check which user is logged in for this
-    const user =
-      (this.props.currentUser && this.props.currentUser.username) ||
-      "aDifferentTaraTest";
+    const { currentUser } = this.props.screenProps;
 
-    let images = await firebase
-      .database()
-      .ref(user)
-      .once("value")
-      .then(function(snapshot) {
-        return snapshot.val();
-      });
+    let images = await api.getPics(currentUser);
+    //console.log(images, "<<<<<<<<<<<<<");
     return images;
   };
 }
