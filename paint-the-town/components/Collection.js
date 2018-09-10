@@ -52,19 +52,15 @@ class Collection extends Component {
   }
   componentDidMount() {
     this.retrievePics().then(images => {
-      //console.log(images);
-      this.setState({ images }, () =>
-        console.log(this.state.images, "£££££££")
-      );
+      this.setState({ images });
     });
   }
 
   retrievePics = async () => {
-    //we will need to check which user is logged in for this
     const { currentUser } = this.props.screenProps;
 
     let images = await api.getPics(currentUser);
-    //console.log(images, "<<<<<<<<<<<<<");
+
     return images;
   };
 }

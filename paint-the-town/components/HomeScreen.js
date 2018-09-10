@@ -4,7 +4,8 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -18,24 +19,24 @@ class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.login}>
-          <Text >Hi {this.props.screenProps.currentUser}</Text>
+          <Text>Hi {this.props.screenProps.currentUser}</Text>
           <Button
-          title={"Log Out"}
-          accessibilityLabel={"Log Out"}
-          color={"#786fa6"}
-          onPress={this.logout}
+            title={"Log Out"}
+            accessibilityLabel={"Log Out"}
+            color={"#786fa6"}
+            onPress={this.logout}
           />
-          </View>
+        </View>
         <Ionicons name="md-walk" size={100} color="white" />
 
-        <TouchableHighlight
+        <TouchableOpacity
           style={styles.button}
           onPress={() => this.props.navigation.navigate("Tracker")}
         >
           <Text>New Journey</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
-        <TouchableHighlight
+        <TouchableOpacity
           style={styles.button}
           onPress={() => this.props.navigation.navigate("Collection")}
         >
@@ -50,14 +51,14 @@ class HomeScreen extends React.Component {
             {() => this.props.navigation.navigate("ColourPicker")}
             containerViewStyle=
             {{ width: "100%", marginLeft: 0 }} */}
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   }
   logout = () => {
     this.props.screenProps.updateUser("");
-    this.props.navigation.navigate("LoginOut")
-  }
+    this.props.navigation.navigate("LoginOut");
+  };
 }
 
 const styles = StyleSheet.create({
@@ -71,11 +72,11 @@ const styles = StyleSheet.create({
   },
   login: {
     fontSize: 20,
-   alignSelf: "flex-end",
-   color: "white",
-   position: "absolute",
-   top: "2%",
-   right: "5%"
+    alignSelf: "flex-end",
+    color: "white",
+    position: "absolute",
+    top: "2%",
+    right: "5%"
   },
   text: {
     fontSize: 20,

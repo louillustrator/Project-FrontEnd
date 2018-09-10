@@ -28,14 +28,15 @@ export const storeJourney = journey => {
     .then(({ data }) => data.journey._id);
 };
 
-export const storePic = (base64, id, user) =>
+export const storePic = (base64, id, user) => {
+  console.log("made it here!!!");
   firebase
     .database()
     .ref(`${user}/${id}`)
     .set({ id, img: `data:image/gif;base64,${base64}` });
+};
 
 export const getPics = currentUser => {
-  console.log(typeof currentUser, "**********");
   return firebase
     .database()
     .ref(currentUser)

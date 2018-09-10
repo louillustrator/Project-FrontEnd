@@ -5,6 +5,7 @@ import ButtAction from "./ButtAction";
 import * as tracker from "../utils/Tracker";
 import Polylines from "./Polylines";
 import * as api from "../api";
+import { takeSnapshotAsync } from "expo";
 
 const { width, height } = Dimensions.get("window");
 
@@ -36,6 +37,7 @@ class Tracker extends Component {
     return (
       <View style={styles.container}>
         <MapView
+          collapsable={false}
           style={styles.map}
           ref="routeMap"
           region={this.state.region}
@@ -93,15 +95,18 @@ class Tracker extends Component {
       user: currentUser,
       route: this.state.route
     };
+
     const newID = await api.storeJourney(newJourney);
 
-    const newPic = await Expo.takeSnapshotAsync(this.refs.routeMap, {
-      result: "base64",
-      height: "1080",
-      width: "1080",
-      quality: 0,
-      format: "jpeg"
-    });
+    const newPic = await takeSnapshotAsync;
+    this.refs.routeMap,
+      {
+        result: "base64",
+        height: 1080,
+        width: 1080,
+        quality: 0,
+        format: "jpg"
+      };
 
     api.storePic(newPic, newID, currentUser);
 
