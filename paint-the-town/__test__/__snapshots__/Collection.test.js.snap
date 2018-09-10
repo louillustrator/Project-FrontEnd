@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "backgroundColor": "#63cdda",
+        "color": "white",
+        "fontSize": 16,
+        "fontWeight": "700",
+        "paddingBottom": 10,
+        "paddingTop": 20,
+        "textAlign": "center",
+      }
+    }
+  >
+    My Gallery
+  </Text>
+  <RCTScrollView
+    contentContainerStyle={
+      Object {
+        "backgroundColor": "#fff",
+        "flexDirection": "row",
+        "flexWrap": "wrap",
+        "justifyContent": "flex-start",
+      }
+    }
+  >
+    <View>
+      <Image
+        source={1}
+        style={
+          Object {
+            "height": 160,
+            "margin": 10,
+            "width": 160,
+          }
+        }
+      />
+      <Image
+        source={1}
+        style={
+          Object {
+            "height": 160,
+            "margin": 10,
+            "width": 160,
+          }
+        }
+      />
+      <Image
+        source={1}
+        style={
+          Object {
+            "height": 160,
+            "margin": 10,
+            "width": 160,
+          }
+        }
+      />
+      <Image
+        source={1}
+        style={
+          Object {
+            "height": 160,
+            "margin": 10,
+            "width": 160,
+          }
+        }
+      />
+      <Image
+        source={1}
+        style={
+          Object {
+            "height": 160,
+            "margin": 10,
+            "width": 160,
+          }
+        }
+      />
+      <Image
+        source={1}
+        style={
+          Object {
+            "height": 160,
+            "margin": 10,
+            "width": 160,
+          }
+        }
+      />
+      <Image
+        source={1}
+        style={
+          Object {
+            "height": 160,
+            "margin": 10,
+            "width": 160,
+          }
+        }
+      />
+    </View>
+  </RCTScrollView>
+</View>
+`;

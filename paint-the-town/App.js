@@ -17,6 +17,7 @@ export default class App extends React.Component {
     currentUser: ""
   };
   render() {
+
     return (
       <RootStack
         screenProps={{
@@ -35,6 +36,7 @@ export default class App extends React.Component {
         });
       }
     });
+
   }
 
   updateUser = currentUser => {
