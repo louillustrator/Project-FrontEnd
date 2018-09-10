@@ -1,45 +1,61 @@
 import React from "react";
 import {
-  Button,
+  //Button,
   Text,
   View,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  Image
 } from "react-native";
-
-import { Ionicons } from "@expo/vector-icons";
+import { Font } from 'expo';
+//import { Ionicons } from "@expo/vector-icons";
 
 class HomeScreen extends React.Component {
   state = {
-    clicked: false
+    clicked: false,
+    fontLoaded: false
   };
 
   render() {
     return (
+      this.state.fontLoaded ? (
       <View style={styles.container}>
         <View style={styles.login}>
-          <Text >Hi {this.props.screenProps.currentUser}</Text>
-          <Button
+          <Text style={{ color: 'white', fontSize: 16, fontFamily: "raleway-regular" }}>Hi {this.props.screenProps.currentUser}</Text>
+          <TouchableHighlight
+          style={styles.logoutButton}
+          onPress={this.logout}
+        >
+        <Text style={{ color: 'white', fontFamily: "raleway-regular" }}>Log Out</Text>
+        </TouchableHighlight>
+          {/* <Button
+          style={styles.button}
           title={"Log Out"}
           accessibilityLabel={"Log Out"}
           color={"#786fa6"}
           onPress={this.logout}
-          />
+          /> */}
           </View>
-        <Ionicons name="md-walk" size={100} color="white" />
-
+        {/* <Ionicons name="md-walk" size={100} color="white" /> */}
+        <Image 
+        style={{width: 170, height: 119}}
+        source={require('../assets/logo.png')} />
+        <Text style={{fontSize: 25, fontFamily: "bubblegum-sans-regular"}}>
+          <Text style={{color: '#f43d3d'}}>Paint</Text><Text style={{color: "#f7f02a"}}> the </Text><Text style={{color: '#5d67ef'}}>Town</Text>
+        </Text> 
         <TouchableHighlight
           style={styles.button}
           onPress={() => this.props.navigation.navigate("Tracker")}
         >
-          <Text>New Journey</Text>
+          <Text style={styles.text}>New Journey</Text>
         </TouchableHighlight>
 
         <TouchableHighlight
           style={styles.button}
+          color={"white"}
           onPress={() => this.props.navigation.navigate("Collection")}
         >
-          <Text>See Collection</Text>
+          <Text style={styles.text}>See Collection</Text>
           {/* title=
             {"Colour Picker"}
             accessibilityLabel=
@@ -51,9 +67,22 @@ class HomeScreen extends React.Component {
             containerViewStyle=
             {{ width: "100%", marginLeft: 0 }} */}
         </TouchableHighlight>
-      </View>
+        </View> ) : null
     );
   }
+
+  componentDidMount() {
+
+    Font.loadAsync({
+      'bubblegum-sans-regular': require('../assets/fonts/BubblegumSans-Regular.ttf'),
+      'raleway-regular': require('../assets/fonts/Raleway-Regular.ttf'),
+    }).then(() => {
+      this.setState({
+        fontLoaded: true
+      })
+    });
+  }
+
   logout = () => {
     this.props.screenProps.updateUser("");
     this.props.navigation.navigate("LoginOut")
@@ -69,21 +98,14 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#63cdda"
   },
+  text : {
+    fontFamily:'raleway-regular' 
+  },
   login: {
-    fontSize: 20,
    alignSelf: "flex-end",
-   color: "white",
    position: "absolute",
    top: "2%",
    right: "5%"
-  },
-  text: {
-    fontSize: 20,
-    alignSelf: "flex-end",
-    color: "white",
-    position: "absolute",
-    top: "2%",
-    right: "5%"
   },
   button: {
     alignItems: "center",
@@ -91,7 +113,16 @@ const styles = StyleSheet.create({
     opacity: 100,
     padding: 17,
     margin: 10,
-    width: "60%"
+    width: "45%"
+  },
+  logoutButton: {
+    alignItems: "center",
+    borderColor: "white",
+    borderWidth: 2,
+    opacity: 100,
+    padding: 8,
+    margin: 10,
+    width: 80,
   }
 });
 

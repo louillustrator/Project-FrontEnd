@@ -10,7 +10,7 @@ import ImageFromCollection from "./components/ImageFromCollection";
 
 export default class App extends React.Component {
   state = {
-    currentUser: ""
+    currentUser: "",
   }
   render() {
     return <RootStack screenProps={{currentUser: this.state.currentUser, updateUser: this.updateUser}}/>;
@@ -50,7 +50,7 @@ const RootStack = createStackNavigator(
     Tracker: Tracker,
     Collection: Collection,
     ColourPicker: ColourPicker,
-    LoginOut: LoginOut
+    LoginOut: LoginOut,
     ImageFromCollection: ImageFromCollection
   },
   {
