@@ -13,18 +13,18 @@ export default class App extends React.Component {
     currentUser: ""
   }
   render() {
-    return <RootStack screenProps={{currentUser: this.state.currentUser, updateUser: this.updateUser}}/>;
+    return <RootStack screenProps={{ currentUser: this.state.currentUser, updateUser: this.updateUser }} />;
   }
 
   componentDidMount() {
     return AsyncStorage.getItem("currentUser")
-    .then(currentUser => {
-      if (currentUser) {
-        this.setState({
-          currentUser
-        })
-      }
-    })
+      .then(currentUser => {
+        if (currentUser) {
+          this.setState({
+            currentUser
+          })
+        }
+      })
   }
 
   updateUser = (currentUser) => {
@@ -50,7 +50,7 @@ const RootStack = createStackNavigator(
     Tracker: Tracker,
     Collection: Collection,
     ColourPicker: ColourPicker,
-    LoginOut: LoginOut
+    LoginOut: LoginOut,
     ImageFromCollection: ImageFromCollection
   },
   {
