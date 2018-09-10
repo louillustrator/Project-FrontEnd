@@ -7,6 +7,10 @@ import Collection from "./components/Collection";
 import ColourPicker from "./components/ColourPicker";
 import LoginOut from "./components/LoginOut";
 import ImageFromCollection from "./components/ImageFromCollection";
+import { config } from "./config";
+import firebase from "firebase";
+
+firebase.initializeApp(config);
 
 export default class App extends React.Component {
   state = {

@@ -32,13 +32,15 @@ export const storePic = (base64, id, user) =>
   firebase
     .database()
     .ref(`${user}/${id}`)
-    .set({ id: { id, img: base64 } });
+    .set({ id, img: `data:image/gif;base64,${base64}` });
 
-export const getPics = currentUser =>
-  firebase
+export const getPics = currentUser => {
+  console.log(typeof currentUser, "**********");
+  return firebase
     .database()
     .ref(currentUser)
     .once("value")
     .then(function(snapshot) {
       return snapshot.val();
     });
+};
