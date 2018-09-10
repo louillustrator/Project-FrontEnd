@@ -85,8 +85,8 @@ class HomeScreen extends React.Component {
 
   logout = () => {
     this.props.screenProps.updateUser("");
-    this.props.navigation.navigate("LoginOut")
-  }
+    this.props.navigation.navigate("LoginOut");
+  };
 }
 
 const styles = StyleSheet.create({
