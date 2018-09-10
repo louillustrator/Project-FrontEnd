@@ -9,10 +9,9 @@ import {
   TouchableOpacity
 } from "react-native";
 import { _ } from "lodash";
+import * as api from "../api";
 import ImageFromCollection from "./ImageFromCollection";
-import config from "../config";
 import firebase from "firebase";
-firebase.initializeApp(config);
 
 class Collection extends Component {
   state = {
@@ -61,18 +60,12 @@ class Collection extends Component {
 
   retrievePics = async () => {
     //we will need to check which user is logged in for this
-    const user =
-      (this.props.currentUser && this.props.currentUser.username) ||
-      "aDifferentTaraTest";
+    const { currentUser } = this.props.screenProps;
 
-    let images = await firebase
-      .database()
-      .ref(user)
-      .once("value")
-      .then(function(snapshot) {
-        return snapshot.val();
-      });
-    return images;
+    let images = await applicationCache.getPics(currentUser);
+    console.log(images);
+
+    //return images;
   };
 }
 

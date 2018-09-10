@@ -11,28 +11,34 @@ import ImageFromCollection from "./components/ImageFromCollection";
 export default class App extends React.Component {
   state = {
     currentUser: ""
-  }
+  };
   render() {
-    return <RootStack screenProps={{currentUser: this.state.currentUser, updateUser: this.updateUser}}/>;
+    return (
+      <RootStack
+        screenProps={{
+          currentUser: this.state.currentUser,
+          updateUser: this.updateUser
+        }}
+      />
+    );
   }
 
   componentDidMount() {
-    return AsyncStorage.getItem("currentUser")
-    .then(currentUser => {
+    return AsyncStorage.getItem("currentUser").then(currentUser => {
       if (currentUser) {
         this.setState({
           currentUser
-        })
+        });
       }
-    })
+    });
   }
 
-  updateUser = (currentUser) => {
-    AsyncStorage.setItem("currentUser", currentUser)
+  updateUser = currentUser => {
+    AsyncStorage.setItem("currentUser", currentUser);
     this.setState({
       currentUser
-    })
-  }
+    });
+  };
 }
 
 const styles = StyleSheet.create({
@@ -50,7 +56,7 @@ const RootStack = createStackNavigator(
     Tracker: Tracker,
     Collection: Collection,
     ColourPicker: ColourPicker,
-    LoginOut: LoginOut
+    LoginOut: LoginOut,
     ImageFromCollection: ImageFromCollection
   },
   {
