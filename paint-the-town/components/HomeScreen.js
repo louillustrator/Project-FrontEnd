@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  //Button,
   Text,
   View,
   StyleSheet,
@@ -8,7 +7,6 @@ import {
   Image
 } from "react-native";
 import { Font } from 'expo';
-//import { Ionicons } from "@expo/vector-icons";
 
 class HomeScreen extends React.Component {
   state = {

@@ -9,7 +9,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import { _ } from "lodash";
-import * as api from "../api";
+import * as api from "../utils/api";
 
 class Collection extends Component {
   state = {
@@ -18,7 +18,6 @@ class Collection extends Component {
 
   render() {
     const { navigate } = this.props.navigation;
-
     return (
       <View style={styles.view}>
         <Text style={styles.navBarText}>My Gallery</Text>

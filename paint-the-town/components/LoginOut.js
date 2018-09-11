@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Text, View, StyleSheet, TouchableHighlight } from "react-native";
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
-import * as api from '../api';
+import * as api from '../utils/api';
 import { Font } from 'expo';
 
 class LoginOut extends React.Component {
