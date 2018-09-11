@@ -32,7 +32,8 @@ export const storePic = (base64, id, user) => {
   firebase
     .database()
     .ref(`${user}/${id}`)
-    .set({ id, img: `data:image/gif;base64,${base64}` });
+    .set({ id, img: `data:image/gif;base64,${base64}` })
+    .catch(err => console.log(err));
 };
 
 export const getPics = currentUser => {
@@ -45,7 +46,8 @@ export const getPics = currentUser => {
     });
 };
 
-export const getJourney = (journey_id) => {
-  return axios.get(`${URL}/journeys/${journey_id}`)
-  .then(res => res.data.journey);
+export const getJourney = journey_id => {
+  return axios
+    .get(`${URL}/journeys/${journey_id}`)
+    .then(res => res.data.journey);
 };

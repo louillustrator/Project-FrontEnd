@@ -23,11 +23,17 @@ class Tracker extends Component {
     width: 1,
     status: null,
     watching: false,
-    colour: "#3600ff"
+    colour: "#3600ff",
+    blueDot: true
   };
   //getting current user postion at the start and setting region in state with it
   componentDidMount() {
     this._getLocationAsync();
+    let journey = this.props.navigation.getParam("journey");
+    if (journey)
+      this.setState({
+        route: journey.route
+      });
   }
 
   _getLocationAsync = tracker._getLocationAsync.bind(this);
@@ -41,11 +47,13 @@ class Tracker extends Component {
           style={styles.map}
           ref="routeMap"
           region={this.state.region}
-          showsUserLocation
-          showsMyLocationButton
+          showsUserLocation={this.state.blueDot}
+          showsMyLocationButton={true}
+          showsCompass={true}
           followUserLocation={true}
           zoomEnabled={true}
           onRegionChangeComplete={this.setZoom}
+          rotateEnabled={true}
         >
           <Polylines route={this.state.route} />
         </MapView>
@@ -98,6 +106,11 @@ class Tracker extends Component {
 
     const newID = await api.storeJourney(newJourney);
 
+    await this.setState({
+      watching: false,
+      blueDot: false
+    });
+
     const newPic = await takeSnapshotAsync(this.refs.routeMap, {
       result: "base64",
       height: 1080,
@@ -105,22 +118,17 @@ class Tracker extends Component {
       quality: 0,
       format: "jpeg"
     });
-
     api.storePic(newPic, newID, currentUser);
-
-    this.setState({
-      watching: false
-    });
   };
 
   setZoom = region => {
-    let currentRegion = {
-      ...this.state.region,
-      latitudeDelta: region.latitudeDelta,
-      longitudeDelta: region.longitudeDelta
-    };
+    // let currentRegion = {
+    //   ...this.state.region,
+    //   latitudeDelta: region.latitudeDelta,
+    //   longitudeDelta: region.longitudeDelta
+    // };
     this.setState({
-      region: currentRegion
+      region
     });
   };
 }
