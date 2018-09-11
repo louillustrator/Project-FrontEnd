@@ -98,15 +98,13 @@ class Tracker extends Component {
 
     const newID = await api.storeJourney(newJourney);
 
-    const newPic = await takeSnapshotAsync
-    (this.refs.routeMap,
-      {
-        result: "base64",
-        height: 1080,
-        width: 1080,
-        quality: 0,
-        format: "jpg"
-      })
+    const newPic = await takeSnapshotAsync(this.refs.routeMap, {
+      result: "base64",
+      height: 1080,
+      width: 1080,
+      quality: 0,
+      format: "jpeg"
+    });
 
     api.storePic(newPic, newID, currentUser);
 
