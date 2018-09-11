@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions, Switch } from "react-native";
 import { MapView } from "expo";
 import ButtAction from "./ButtAction";
 import * as tracker from "../utils/Tracker";
@@ -24,7 +24,8 @@ class Tracker extends Component {
     status: null,
     watching: false,
     colour: "#3600ff",
-    blueDot: true
+    blueDot: true,
+    toggle: false
   };
   //getting current user postion at the start and setting region in state with it
   componentDidMount() {
@@ -42,6 +43,7 @@ class Tracker extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Switch onValueChange={this.toggle} value={this.state.toggle} />
         <MapView
           collapsable={false}
           style={styles.map}
@@ -54,9 +56,11 @@ class Tracker extends Component {
           zoomEnabled={true}
           onRegionChangeComplete={this.setZoom}
           rotateEnabled={true}
+          mapType={this.state.toggle ? "satellite" : "standard"}
         >
           <Polylines route={this.state.route} />
         </MapView>
+
         <ButtAction
           style={styles.butt}
           changeColour={this.changeColour}
@@ -119,6 +123,8 @@ class Tracker extends Component {
       format: "jpeg"
     });
     api.storePic(newPic, newID, currentUser);
+
+    this.setState({ blueDot: true });
   };
 
   setZoom = region => {
@@ -131,6 +137,8 @@ class Tracker extends Component {
       region
     });
   };
+
+  toggle = () => this.setState({ toggle: !this.state.toggle });
 }
 
 const styles = StyleSheet.create({
