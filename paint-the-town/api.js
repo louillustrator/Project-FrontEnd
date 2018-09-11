@@ -29,7 +29,6 @@ export const storeJourney = journey => {
 };
 
 export const storePic = (base64, id, user) => {
-  console.log("made it here!!!");
   firebase
     .database()
     .ref(`${user}/${id}`)
