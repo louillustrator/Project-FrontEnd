@@ -44,7 +44,7 @@ class Tracker extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={exportStyles.navBarText}>New Journey</Text>
+        {/* <Text style={exportStyles.navBarText}>New Journey</Text> */}
         <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
           <Switch onValueChange={this.toggle} value={this.state.toggle} />
           <Text style={styles.text}>Satellite View</Text>
