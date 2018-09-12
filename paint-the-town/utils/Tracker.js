@@ -63,12 +63,5 @@ export const _watchPosition = function(val) {
       enableHighAccuracy: true
     });
 
-    this.setState({
-      status: "granted",
-      region: {
-        ...this.state.region,
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude
-      }
-    });
+    return location;
   };

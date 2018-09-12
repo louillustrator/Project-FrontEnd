@@ -29,8 +29,16 @@ class Tracker extends Component {
     toggle: false
   };
   //getting current user postion at the start and setting region in state with it
-  componentDidMount() {
-    this._getLocationAsync();
+  componentDidMount = async () => {
+    let location = await this._getLocationAsync();
+    this.setState({
+      status: "granted",
+      region: {
+        ...this.state.region,
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude
+      }
+    });
     let journey = this.props.navigation.getParam("journey");
     if (journey)
       this.setState({
@@ -81,18 +89,56 @@ class Tracker extends Component {
     //{" "}
   }
 
-  changeColour = colour => {
-    let path = { latLng: [], colour, width: this.state.width };
-    this.setState({
-      route: [...this.state.route, path],
-      colour
-    });
+  changeColour = async (colour) => {
     this.props.navigation.navigate("Tracker");
+    if(this.state.watching) {
+      let location = await this._getLocationAsync();
+      let object = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        timestamp: location.timestamp
+      };
+      let route = [...this.state.route]
+      let currentObj = {...route[route.length -1]}
+      let latLng = [...currentObj.latLng, object]
+      currentObj.latLng = latLng
+      route[route.length-1] = currentObj
+      let newObj = { latLng: [object], colour, width: this.state.width };
+      route.push(newObj)
+      this.setState({
+        route,
+        colour
+      });
+    } else {
+    let route = [...this.state.route]
+    let currentObj = {...route[route.length -1]}
+    currentObj.colour = colour
+    route[route.length-1] = currentObj
+      this.setState({
+        route,
+        colour
+      })
+    }
+    
   };
 
-  pause = () => {
+  pause = async () => {
     this._watchPosition(0);
+    let location = await this._getLocationAsync()
+    let object = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      timestamp: location.timestamp
+    };
+    let route = [...this.state.route]
+    let currentObj = {...route[route.length -1]}
+    let latLng = [...currentObj.latLng, object]
+    currentObj.latLng = latLng
+    route[route.length-1] = currentObj
+    let newObj = { latLng: [], colour: this.state.colour, width: this.state.width };
+    route.push(newObj)
     this.setState({
+      route,
       watching: false
     });
   };

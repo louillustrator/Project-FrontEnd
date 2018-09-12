@@ -17,10 +17,10 @@ const ButtAction = ({
       changeColour: changeColour
     });
   };
-  const rgb = { red: 231, green: 76, blue: 60, alpha: 1 };
+  const rgb = hexToRGB(colour);
   return (
     <ActionButton
-      buttonColor={`rgba(${rgb.red},${rgb.green},${rgb.blue},${rgb.alpha})`}
+      buttonColor={rgb}
       radius={90}
       position="center"
       degrees={270}
@@ -67,6 +67,13 @@ const ButtAction = ({
     </ActionButton>
   );
 };
+
+const hexToRGB = (hex) => {
+  const r = parseInt(hex.slice(1, 3), 16),
+        g = parseInt(hex.slice(3, 5), 16),
+        b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},1)`;
+}
 
 const styles = StyleSheet.create({
   actionButtonIcon: {
