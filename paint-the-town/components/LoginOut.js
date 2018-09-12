@@ -1,11 +1,5 @@
-import React from "react";
-import {
-  Button,
-  Text,
-  View,
-  StyleSheet,
-  TouchableHighlight
-} from "react-native";
+import React, { Component } from "react";
+import { Text, View, TouchableHighlight } from "react-native";
 import {
   FormLabel,
   FormInput,
@@ -13,8 +7,8 @@ import {
 } from "react-native-elements";
 import * as api from "../utils/api";
 import { Font } from "expo";
-
-class LoginOut extends React.Component {
+import { loginStyles } from "../styles";
+class LoginOut extends Component {
   state = {
     allUsernames: [],
     username: "",
@@ -24,76 +18,52 @@ class LoginOut extends React.Component {
     fontLoaded: false
   };
   render() {
-    // if (this.props.screenProps.currentUser) this.props.navigation.navigate("Home")
-    return this.state.fontLoaded ? (
-      <View style={styles.container}>
+    const {
+      fontLoaded,
+      passwordError,
+      usernameError,
+      password,
+      username
+    } = this.state;
+    const { container, button, disabledButton, text, grey } = loginStyles;
+
+    return fontLoaded ? (
+      <View style={container}>
+
         <Text style={{ fontSize: 25, fontFamily: "bubblegum-sans-regular" }}>
           <Text style={{ color: "#f43d3d" }}>Paint</Text>
           <Text style={{ color: "#f7f02a" }}> the </Text>
           <Text style={{ color: "#5d67ef" }}>Town</Text>
         </Text>
-        <Text
-          style={{ color: "white", padding: 10, fontFamily: "raleway-regular" }}
-        >
-          Login or Sign Up to get started
-        </Text>
-        <FormLabel labelStyle={{ color: "white" }}>USERNAME</FormLabel>
+        <Text style={text}>Login or Sign Up to get started</Text>
+        <FormLabel labelStyle={grey}>USERNAME</FormLabel>
         <FormInput
-          inputContainerStyle={{ color: "#898989" }}
-          value={this.state.username}
+          inputContainerStyle={grey}
+          value={username}
           onChangeText={text => this.handleChange("username", text)}
         />
-        <FormValidationMessage>
-          {this.state.usernameError}
-        </FormValidationMessage>
-        <FormLabel labelStyle={{ color: "white" }}>PASSWORD</FormLabel>
+        <FormValidationMessage>{usernameError}</FormValidationMessage>
+        <FormLabel labelStyle={grey}>PASSWORD</FormLabel>
         <FormInput
-          value={this.state.password}
+          value={password}
           secureTextEntry={true}
           onChangeText={text => this.handleChange("password", text)}
         />
-        <FormValidationMessage>
-          {this.state.passwordError}
-        </FormValidationMessage>
+        <FormValidationMessage>{passwordError}</FormValidationMessage>
         <TouchableHighlight
-          style={
-            !this.state.username || !this.state.password
-              ? styles.disabledButton
-              : styles.button
-          }
-          disabled={!this.state.username || !this.state.password}
+          style={!username || !password ? disabledButton : button}
+          disabled={!username || !password}
           onPress={() => this.handleLogin()}
         >
-          <Text style={{ color: "#898989", fontFamily: "raleway-regular" }}>
-            Login
-          </Text>
+          <Text style={grey}>Login</Text>
         </TouchableHighlight>
-        {/* <Button
-        style={styles.button}
-        disabled={!this.state.username || !this.state.password ? true : false}
-        title={"Login"}
-        accessibilityLabel={"Login"}
-        //color={"#786fa6"}
-        onPress={() => this.handleLogin()}/> */}
         <TouchableHighlight
-          style={
-            !this.state.username || !this.state.password
-              ? styles.disabledButton
-              : styles.button
-          }
-          disabled={!this.state.username || !this.state.password}
+          style={!username || !password ? disabledButton : button}
+          disabled={!username || !password}
           onPress={() => this.handleSignUp()}
         >
-          <Text style={{ fontFamily: "raleway-regular", color: "#898989" }}>
-            Sign Up
-          </Text>
+          <Text style={grey}>Sign Up</Text>
         </TouchableHighlight>
-        {/* <Button
-        disabled={!this.state.username || !this.state.password ? true : false}
-        title={"Sign Up"}
-        accessibilityLabel={"Sign up"}
-        color={"#786fa6"}
-        onPress={() => this.handleSignUp()}/> */}
       </View>
     ) : null;
   }
@@ -110,8 +80,9 @@ class LoginOut extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.screenProps.currentUser)
-      this.props.navigation.navigate("Home");
+    const { screenProps, navigation } = this.props;
+
+    if (screenProps.currentUser) navigation.navigate("Home");
     api.getUsernames().then(allUsernames => {
       if (this.state.allUsernames.length !== allUsernames.length) {
         this.setState({
@@ -136,79 +107,52 @@ class LoginOut extends React.Component {
   };
 
   handleLogin = () => {
-    if (this.state.allUsernames.includes(this.state.username.toLowerCase())) {
-      api
-        .checkPassword(this.state.username.toLowerCase(), this.state.password)
-        .then(message => {
-          if (message === "Password accepted") {
-            this.props.screenProps.updateUser(
-              this.state.username.toLowerCase()
-            );
-            this.setState({
-              username: "",
-              password: ""
-            });
-            this.props.navigation.navigate("Home");
-          } else {
-            this.setState({
-              passwordError: "Incorrect password"
-            });
-          }
-        });
+    const { username, allUsernames, password } = this.state;
+    const { screenProps, navigation } = this.props;
+
+    if (allUsernames.includes(username.toLowerCase())) {
+      api.checkPassword(username.toLowerCase(), password).then(message => {
+        if (message === "Password accepted") {
+          screenProps.updateUser(username.toLowerCase());
+          this.setState({
+            username: "",
+            password: ""
+          });
+          navigation.navigate("Home");
+        } else {
+          this.setState({
+            passwordError: "Incorrect password"
+          });
+        }
+      });
     } else {
       this.setState({
         usernameError: "Username not found!"
       });
     }
   };
+
   handleSignUp = () => {
-    if (this.state.allUsernames.includes(this.state.username.toLowerCase())) {
+    const { username, allUsernames, password } = this.state;
+    const { navigation, screenProps } = this.props;
+
+    if (allUsernames.includes(username.toLowerCase())) {
       this.setState({
         usernameError: "Username already exists!"
       });
     } else {
-      api
-        .addUser(this.state.username.toLowerCase(), this.state.password)
-        .then(message => {
-          if (message === "OK") {
-            this.props.screenProps.updateUser(
-              this.state.username.toLowerCase()
-            );
-            this.setState({
-              username: "",
-              password: ""
-            });
-            this.props.navigation.navigate("Home");
-          }
-        });
+      api.addUser(username.toLowerCase(), password).then(message => {
+        if (message === "OK") {
+          screenProps.updateUser(username.toLowerCase());
+          this.setState({
+            username: "",
+            password: ""
+          });
+          navigation.navigate("Home");
+        }
+      });
     }
   };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "#63cdda"
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "white",
-    opacity: 100,
-    padding: 17,
-    margin: 10,
-    width: "50%"
-  },
-  disabledButton: {
-    alignItems: "center",
-    backgroundColor: "#c4c4c4",
-    opacity: 100,
-    padding: 17,
-    margin: 10,
-    width: "50%"
-  }
-});
 
 export default LoginOut;
