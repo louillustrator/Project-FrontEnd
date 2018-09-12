@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Dimensions, Switch } from "react-native";
+import { StyleSheet, View, Dimensions, Switch, Text } from "react-native";
 import { MapView } from "expo";
 import ButtAction from "./ButtAction";
 import * as tracker from "../utils/Tracker";
 import Polylines from "./Polylines";
 import * as api from "../utils/api";
 import { takeSnapshotAsync } from "expo";
+import exportStyles from "../styles";
 
 const { width, height } = Dimensions.get("window");
 
@@ -43,7 +44,11 @@ class Tracker extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Switch onValueChange={this.toggle} value={this.state.toggle} />
+        <Text style={exportStyles.navBarText}>New Journey</Text>
+        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+          <Switch onValueChange={this.toggle} value={this.state.toggle} />
+          <Text style={styles.text}>Satellite View</Text>
+        </View>
         <MapView
           collapsable={false}
           style={styles.map}
@@ -73,6 +78,7 @@ class Tracker extends Component {
         {/* <Text>{_haversine(this.state.route)}</Text> */}
       </View>
     );
+    //{" "}
   }
 
   changeColour = colour => {
@@ -144,7 +150,8 @@ class Tracker extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    flexDirection: "column",
+    //justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF"
   },
@@ -160,10 +167,17 @@ const styles = StyleSheet.create({
   },
   navBarText: {
     color: "#19B5FE",
+    alignSelf: "stretch",
+    //height: height,
+    width: width,
     fontSize: 16,
     fontWeight: "700",
     textAlign: "center",
     paddingTop: 30
+  },
+  text: {
+    padding: 5,
+    fontStyle: "italic"
   },
   map: {
     flex: 0.7,

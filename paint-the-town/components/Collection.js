@@ -13,7 +13,8 @@ import * as api from "../utils/api";
 
 class Collection extends Component {
   state = {
-    images: {}
+    images: null,
+    loading: true
   };
 
   render() {
@@ -21,12 +22,12 @@ class Collection extends Component {
     return (
       <View style={styles.view}>
         <Text style={styles.navBarText}>My Gallery</Text>
-        {Object.keys(this.state.images).length === 0 ? (
-          <ActivityIndicator
-            size={70}
-            color="#fa8231"
-            animating={Object.keys(this.state.images).length === 0}
-          />
+        {this.state.loading ? (
+          <ActivityIndicator color="#fa8231" />
+        ) : !this.state.images ? (
+          <Text style={[styles.text, { padding: 10 }]}>
+            You haven't recorded any journeys yet!
+          </Text>
         ) : (
           <ScrollView contentContainerStyle={styles.container}>
             {_.map(Object.values(this.state.images), imageLink => {
@@ -51,7 +52,8 @@ class Collection extends Component {
   }
   componentDidMount() {
     this.retrievePics().then(images => {
-      this.setState({ images });
+      if (images) this.setState({ images, loading: false });
+      else this.setState({ loading: false });
     });
   }
 
