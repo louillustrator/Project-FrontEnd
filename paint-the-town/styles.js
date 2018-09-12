@@ -1,4 +1,6 @@
 import { StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
+const { width } = Dimensions.get("window");
 
 export const universalStyles = StyleSheet.create({
   text: {
@@ -36,7 +38,6 @@ export const collectionStyles = StyleSheet.create({
   },
   image: {
     margin: 10,
-
     width: 160,
     height: 160
   },
@@ -72,14 +73,6 @@ export const homeStyles = StyleSheet.create({
     top: "2%",
     right: "5%"
   },
-  // button: {
-  //   alignItems: "center",
-  //   backgroundColor: "white",
-  //   opacity: 100,
-  //   padding: 17,
-  //   margin: 10,
-  //   width: "45%"
-  // },
   logoutButton: {
     alignItems: "center",
     borderColor: "white",
@@ -91,4 +84,12 @@ export const homeStyles = StyleSheet.create({
     width: 80
   },
   image: { width: 170, height: 119 }
+});
+
+export const imageStyles = StyleSheet.create({
+  image: {
+    margin: 10,
+    width: width,
+    height: width
+  }
 });
