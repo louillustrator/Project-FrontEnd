@@ -54,11 +54,15 @@ class Tracker extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <Text style={exportStyles.navBarText}>New Journey</Text> */}
-        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+        <View style={styles.navBar}>
+          <Text style={styles.navBarText}>My Journey</Text>
+        </View>
+
+        <View style={styles.toggle}>
           <Switch onValueChange={this.toggle} value={this.state.toggle} />
           <Text style={styles.text}>Satellite View</Text>
         </View>
+
         <MapView
           collapsable={false}
           style={styles.map}
@@ -89,7 +93,6 @@ class Tracker extends Component {
         {/* <Text>{_haversine(this.state.route)}</Text> */}
       </View>
     );
-    //{" "}
   }
 
   changeColour = async (colour) => {
@@ -249,35 +252,30 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    //justifyContent: "center",
+
     alignItems: "center",
     backgroundColor: "#F5FCFF"
   },
   navBar: {
-    backgroundColor: "rgba(0,0,0,0.7)",
-    height: 64,
+    backgroundColor: "#63cdda",
+    height: 50,
     width: width,
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0
+    position: "absolute"
   },
   navBarText: {
-    color: "#19B5FE",
-    alignSelf: "stretch",
-    //height: height,
-    width: width,
+    color: "white",
     fontSize: 16,
+    top: 15,
     fontWeight: "700",
-    textAlign: "center",
-    paddingTop: 30
+    textAlign: "center"
   },
   text: {
+    fontSize: 13,
     padding: 5,
     fontStyle: "italic"
   },
   map: {
+    top: 90,
     flex: 0.7,
     width: width,
     height: height
@@ -289,6 +287,12 @@ const styles = StyleSheet.create({
     top: 10,
     left: 10,
     zIndex: 10
+  },
+  toggle: {
+    position: "relative",
+    top: 65,
+    flexDirection: "row",
+    flexWrap: "wrap"
   }
 });
 
