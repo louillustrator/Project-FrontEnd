@@ -45,8 +45,12 @@ class Tracker extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.navBar}>
+          <Text style={styles.navBarText}>My Journey</Text>
+        </View>
+
+        <View style={styles.toggle}>
           <Switch onValueChange={this.toggle} value={this.state.toggle} />
-          <Text style={styles.navBarText}>Track Your Journey</Text>
+          <Text style={styles.text}>Satellite View</Text>
         </View>
 
         <MapView
@@ -78,7 +82,6 @@ class Tracker extends Component {
         {/* <Text>{_haversine(this.state.route)}</Text> */}
       </View>
     );
-    //{" "}
   }
 
   changeColour = colour => {
@@ -157,18 +160,19 @@ const styles = StyleSheet.create({
   },
   navBar: {
     backgroundColor: "#63cdda",
-    height: 64,
+    height: 50,
     width: width,
     position: "absolute"
   },
   navBarText: {
     color: "white",
-
     fontSize: 16,
+    top: 15,
     fontWeight: "700",
     textAlign: "center"
   },
   text: {
+    fontSize: 13,
     padding: 5,
     fontStyle: "italic"
   },
@@ -185,6 +189,12 @@ const styles = StyleSheet.create({
     top: 10,
     left: 10,
     zIndex: 10
+  },
+  toggle: {
+    position: "relative",
+    top: 65,
+    flexDirection: "row",
+    flexWrap: "wrap"
   }
 });
 
