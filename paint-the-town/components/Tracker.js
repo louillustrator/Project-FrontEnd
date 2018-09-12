@@ -143,7 +143,18 @@ class Tracker extends Component {
     });
   };
 
-  start = () => {
+  start = async () => {
+    let location = await this._getLocationAsync()
+    let object = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      timestamp: location.timestamp
+    };
+    let route = [...this.state.route]
+    let currentObj = {...route[route.length -1]}
+    let latLng = [...currentObj.latLng, object]
+    currentObj.latLng = latLng
+    route[route.length-1] = currentObj
     this._watchPosition(1);
     this.setState({
       watching: true

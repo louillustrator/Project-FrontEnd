@@ -4,6 +4,7 @@ import MapView from 'react-native-maps'
 
 const Polylines = ({route}) => {
     if (Platform.OS === 'android'){
+      const iosRoute = getIosRoute(route)
       return (<View>
           {route.map((path, index) =>
           {
@@ -61,6 +62,7 @@ const getIosRoute = (route) => {
       colourMap.push(currentObjColours)
     }
   })
+  console.log(coords)
   return {coords, colourMap}
 }
 
