@@ -157,6 +157,7 @@ class Tracker extends Component {
     route[route.length-1] = currentObj
     this._watchPosition(1);
     this.setState({
+      route,
       watching: true
     });
   };

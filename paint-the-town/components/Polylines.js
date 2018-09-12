@@ -62,7 +62,6 @@ const getIosRoute = (route) => {
       colourMap.push(currentObjColours)
     }
   })
-  console.log(coords)
   return {coords, colourMap}
 }
 
