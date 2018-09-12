@@ -44,11 +44,11 @@ class Tracker extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <Text style={exportStyles.navBarText}>New Journey</Text> */}
-        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+        <View style={styles.navBar}>
           <Switch onValueChange={this.toggle} value={this.state.toggle} />
-          <Text style={styles.text}>Satellite View</Text>
+          <Text style={styles.navBarText}>Track Your Journey</Text>
         </View>
+
         <MapView
           collapsable={false}
           style={styles.map}
@@ -151,35 +151,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    //justifyContent: "center",
+
     alignItems: "center",
     backgroundColor: "#F5FCFF"
   },
   navBar: {
-    backgroundColor: "rgba(0,0,0,0.7)",
+    backgroundColor: "#63cdda",
     height: 64,
     width: width,
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0
+    position: "absolute"
   },
   navBarText: {
-    color: "#19B5FE",
-    alignSelf: "stretch",
-    //height: height,
-    width: width,
+    color: "white",
+
     fontSize: 16,
     fontWeight: "700",
-    textAlign: "center",
-    paddingTop: 30
+    textAlign: "center"
   },
   text: {
     padding: 5,
     fontStyle: "italic"
   },
   map: {
+    top: 90,
     flex: 0.7,
     width: width,
     height: height
