@@ -25,7 +25,7 @@ const Polylines = ({route}) => {
           return <MapView.Polyline
           key={index}
           coordinates={line}
-          strokeWidth={path.width}
+          strokeWidth={1}
           strokeColors={iosRoute.colourMap[index]}
           lineCap="round"
           linejoin="round"
@@ -38,7 +38,7 @@ const Polylines = ({route}) => {
 const getIosRoute = (route) => {
   let coords = [], colourMap = [];
   route.forEach((obj, index) => {
-    if (index === 1) {
+    if (index === 0) {
       coords.push(obj.latLng);
       let currentObjColours = []
       for (let i = 0; i < obj.latLng.length; i++){
@@ -46,7 +46,7 @@ const getIosRoute = (route) => {
       }
       colourMap.push(currentObjColours)
     } else if(obj.latLng[0] === route[index - 1].latLng[route[index - 1].latLng.length-1]){
-      coords[coords.length -1] = coords[coords.length -1].concat[obj.latLng]
+      coords[coords.length -1] = coords[coords.length -1].concat(obj.latLng)
       let currentObjColours = []
       for (let i = 0; i < obj.latLng.length; i++){
         currentObjColours.push(obj.colour)
