@@ -8,7 +8,6 @@ import {
 import * as api from "../utils/api";
 import { Font } from "expo";
 import { loginStyles } from "../styles";
-
 class LoginOut extends Component {
   state = {
     allUsernames: [],
@@ -30,6 +29,7 @@ class LoginOut extends Component {
 
     return fontLoaded ? (
       <View style={container}>
+
         <Text style={{ fontSize: 25, fontFamily: "bubblegum-sans-regular" }}>
           <Text style={{ color: "#f43d3d" }}>Paint</Text>
           <Text style={{ color: "#f7f02a" }}> the </Text>
