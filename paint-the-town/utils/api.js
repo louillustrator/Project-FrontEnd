@@ -29,11 +29,11 @@ export const storeJourney = journey => {
 };
 
 export const storePic = (base64, id, user) => {
-  console.log("made it here!!!");
   firebase
     .database()
     .ref(`${user}/${id}`)
-    .set({ id, img: `data:image/gif;base64,${base64}` });
+    .set({ id, img: `data:image/gif;base64,${base64}` })
+    .catch(err => console.log(err));
 };
 
 export const getPics = currentUser => {
@@ -44,4 +44,10 @@ export const getPics = currentUser => {
     .then(function(snapshot) {
       return snapshot.val();
     });
+};
+
+export const getJourney = journey_id => {
+  return axios
+    .get(`${URL}/journeys/${journey_id}`)
+    .then(res => res.data.journey);
 };
