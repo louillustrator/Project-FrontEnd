@@ -7,7 +7,7 @@ import {
   Image
 } from "react-native";
 import { Font } from "expo";
-import exportStyles from "../styles.js";
+import { universalStyles } from "../styles.js";
 
 class HomeScreen extends React.Component {
   state = {
@@ -45,18 +45,18 @@ class HomeScreen extends React.Component {
           <Text style={{ color: "#5d67ef" }}>Town</Text>
         </Text>
         <TouchableHighlight
-          style={exportStyles.button}
+          style={universalStyles.button}
           onPress={() => this.props.navigation.navigate("Tracker")}
         >
-          <Text style={exportStyles.text}>New Journey</Text>
+          <Text style={universalStyles.text}>New Journey</Text>
         </TouchableHighlight>
 
         <TouchableHighlight
-          style={exportStyles.button}
+          style={universalStyles.button}
           color={"white"}
           onPress={() => this.props.navigation.navigate("Collection")}
         >
-          <Text style={exportStyles.text}>See Collection</Text>
+          <Text style={universalStyles.text}>See Collection</Text>
         </TouchableHighlight>
       </View>
     ) : null;
