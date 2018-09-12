@@ -1,62 +1,43 @@
-import React from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableHighlight,
-  Image
-} from "react-native";
+import React, { Component } from "react";
+import { Text, View, TouchableHighlight, Image } from "react-native";
 import { Font } from "expo";
-import { universalStyles } from "../styles.js";
+import { universalStyles, homeStyles } from "../styles.js";
 
-class HomeScreen extends React.Component {
+class HomeScreen extends Component {
   state = {
-    clicked: false,
     fontLoaded: false
   };
 
   render() {
+    const { container, login, logoutButton, logText, image } = homeStyles;
+    const { button, text } = universalStyles;
+    const { navigate } = this.props.navigation;
+
     return this.state.fontLoaded ? (
-      <View style={styles.container}>
-        <View style={styles.login}>
-          <Text
-            style={{
-              color: "white",
-              fontSize: 16,
-              fontFamily: "raleway-regular"
-            }}
-          >
-            Hi {this.props.screenProps.currentUser}
-          </Text>
-          <TouchableHighlight style={styles.logoutButton} onPress={this.logout}>
-            <Text style={{ color: "white", fontFamily: "raleway-regular" }}>
-              Log Out
-            </Text>
+      <View style={container}>
+        <View style={login}>
+          <Text style={logText}>Hi {this.props.screenProps.currentUser}</Text>
+          <TouchableHighlight style={logoutButton} onPress={this.logout}>
+            <Text style={[logText, { fontSize: 14 }]}>Log Out</Text>
           </TouchableHighlight>
         </View>
 
-        <Image
-          style={{ width: 170, height: 119 }}
-          source={require("../assets/logo.png")}
-        />
+        <Image style={image} source={require("../assets/logo.png")} />
         <Text style={{ fontSize: 25, fontFamily: "bubblegum-sans-regular" }}>
           <Text style={{ color: "#f43d3d" }}>Paint</Text>
           <Text style={{ color: "#f7f02a" }}> the </Text>
           <Text style={{ color: "#5d67ef" }}>Town</Text>
         </Text>
-        <TouchableHighlight
-          style={universalStyles.button}
-          onPress={() => this.props.navigation.navigate("Tracker")}
-        >
-          <Text style={universalStyles.text}>New Journey</Text>
+        <TouchableHighlight style={button} onPress={() => navigate("Tracker")}>
+          <Text style={text}>New Journey</Text>
         </TouchableHighlight>
 
         <TouchableHighlight
-          style={universalStyles.button}
+          style={button}
           color={"white"}
-          onPress={() => this.props.navigation.navigate("Collection")}
+          onPress={() => navigate("Collection")}
         >
-          <Text style={universalStyles.text}>See Collection</Text>
+          <Text style={text}>See Collection</Text>
         </TouchableHighlight>
       </View>
     ) : null;
@@ -78,42 +59,5 @@ class HomeScreen extends React.Component {
     this.props.navigation.navigate("LoginOut");
   };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#63cdda"
-  },
-  // text : {
-  //   fontFamily:'raleway-regular'
-  // },
-  login: {
-    alignSelf: "flex-end",
-    position: "absolute",
-    top: "2%",
-    right: "5%"
-  },
-  // button: {
-  //   alignItems: "center",
-  //   backgroundColor: "white",
-  //   opacity: 100,
-  //   padding: 17,
-  //   margin: 10,
-  //   width: "45%"
-  // },
-  logoutButton: {
-    alignItems: "center",
-    borderColor: "white",
-    borderWidth: 2,
-    opacity: 100,
-    padding: 8,
-    margin: 10,
-    width: 80
-  }
-});
 
 export default HomeScreen;

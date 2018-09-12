@@ -49,10 +49,46 @@ export const collectionStyles = StyleSheet.create({
     textAlign: "center",
     paddingTop: 20,
     paddingBottom: 10
-  },
-  horizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10
   }
+});
+
+export const homeStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "#63cdda"
+  },
+  logText: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "raleway-regular"
+  },
+  login: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    top: "2%",
+    right: "5%"
+  },
+  // button: {
+  //   alignItems: "center",
+  //   backgroundColor: "white",
+  //   opacity: 100,
+  //   padding: 17,
+  //   margin: 10,
+  //   width: "45%"
+  // },
+  logoutButton: {
+    alignItems: "center",
+    borderColor: "white",
+    borderWidth: 2,
+    opacity: 100,
+    padding: 8,
+    margin: 10,
+    marginLeft: 25,
+    width: 80
+  },
+  image: { width: 170, height: 119 }
 });
