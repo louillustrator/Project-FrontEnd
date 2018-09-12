@@ -7,6 +7,7 @@ import Polylines from "./Polylines";
 import * as api from "../utils/api";
 import { takeSnapshotAsync } from "expo";
 import exportStyles from "../styles";
+import WidthPicker from './WidthPicker';
 
 const { width, height } = Dimensions.get("window");
 
@@ -26,7 +27,8 @@ class Tracker extends Component {
     watching: false,
     colour: "#3600ff",
     blueDot: true,
-    toggle: false
+    toggle: false,
+    showSlider: false
   };
   //getting current user postion at the start and setting region in state with it
   componentDidMount = async () => {
@@ -73,7 +75,7 @@ class Tracker extends Component {
         >
           <Polylines route={this.state.route} />
         </MapView>
-
+        {this.state.showSlider && <WidthPicker setShowSlider={this.setShowSlider} setWidth={this.setWidth} currentWidth={this.state.width}/>}
         <ButtAction
           style={styles.butt}
           changeColour={this.changeColour}
@@ -82,6 +84,7 @@ class Tracker extends Component {
           start={this.start}
           pause={this.pause}
           stop={this.stop}
+          setShowSlider={this.setShowSlider}
         />
         {/* <Text>{_haversine(this.state.route)}</Text> */}
       </View>
@@ -203,6 +206,43 @@ class Tracker extends Component {
   };
 
   toggle = () => this.setState({ toggle: !this.state.toggle });
+
+  setShowSlider = (val) => {
+    this.setState({
+      showSlider: val
+    })
+  }
+
+  setWidth = async (width) => {
+    if(this.state.watching) {
+      let location = await this._getLocationAsync();
+      let object = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        timestamp: location.timestamp
+      };
+      let route = [...this.state.route]
+      let currentObj = {...route[route.length -1]}
+      let latLng = [...currentObj.latLng, object]
+      currentObj.latLng = latLng
+      route[route.length-1] = currentObj
+      let newObj = { latLng: [object], colour: this.state.colour, width };
+      route.push(newObj)
+      this.setState({
+        route,
+        width
+      });
+    } else {
+    let route = [...this.state.route]
+    let currentObj = {...route[route.length -1]}
+    currentObj.width = width
+    route[route.length-1] = currentObj
+      this.setState({
+        route,
+        width
+      })
+    }
+  }
 }
 
 const styles = StyleSheet.create({

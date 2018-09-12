@@ -9,7 +9,8 @@ const ButtAction = ({
   changeColour,
   stop,
   start,
-  pause
+  pause,
+  setShowSlider
 }) => {
   const colourPickerFn = () => {
     navigation.navigate("ColourPicker", {
@@ -63,6 +64,15 @@ const ButtAction = ({
         style={{ zIndex: 10 }}
       >
         <Icon name="md-color-palette" style={styles.actionButtonIcon} />
+      </ActionButton.Item>
+      <ActionButton.Item 
+        buttonColor='#9b59b6' 
+        title="Width Select" 
+        size={60} 
+        onPress={() => setShowSlider(true)} 
+        style={{zIndex: 10}}>
+            <Icon name="md-arrow-back" style={styles.actionButtonIcon} />
+            <Icon name="md-arrow-forward" style={styles.actionButtonIcon} />
       </ActionButton.Item>
     </ActionButton>
   );
