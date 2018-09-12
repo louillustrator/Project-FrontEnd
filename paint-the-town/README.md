@@ -2,7 +2,7 @@
 
 Paint the Town is an iOS App which aims to get people both active and creative. Inspired by the drawings that people create using fitness apps such as Strava, the aim was to make something specifically for creating your own artwork across a map.
 
-The app draws your path, with the option to change colours, change line-thickness and pause, will the option to display as a satellite view or a standard map. You can also save your image and add to it later, which could allow for collaboration between users in future versions.
+The app draws your path, with the option to change colours, change line-thickness and pause, with the option to display as a satellite view or a standard map. You can also save your image and add to it later, which could allow for collaboration between users in future versions.
 
 ## Getting Started
 
