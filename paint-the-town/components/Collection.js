@@ -3,13 +3,13 @@ import {
   Text,
   View,
   Image,
-  StyleSheet,
   ScrollView,
   ActivityIndicator,
   TouchableOpacity
 } from "react-native";
 import { _ } from "lodash";
 import * as api from "../utils/api";
+import { collectionStyles } from "../styles.js";
 
 class Collection extends Component {
   state = {
@@ -19,18 +19,21 @@ class Collection extends Component {
 
   render() {
     const { navigate } = this.props.navigation;
+    const { loading, images } = this.state;
+    const { navBarText, text, container, image } = collectionStyles;
+
     return (
-      <View style={styles.view}>
-        <Text style={styles.navBarText}>My Gallery</Text>
-        {this.state.loading ? (
+      <View>
+        <Text style={navBarText}>My Gallery</Text>
+        {loading ? (
           <ActivityIndicator color="#fa8231" />
-        ) : !this.state.images ? (
-          <Text style={[styles.text, { padding: 10 }]}>
+        ) : !images ? (
+          <Text style={[text, { padding: 10 }]}>
             You haven't recorded any journeys yet!
           </Text>
         ) : (
-          <ScrollView contentContainerStyle={styles.container}>
-            {_.map(Object.values(this.state.images), imageLink => {
+          <ScrollView contentContainerStyle={container}>
+            {_.map(Object.values(images), imageLink => {
               return (
                 <TouchableOpacity
                   key={imageLink.id}
@@ -38,10 +41,7 @@ class Collection extends Component {
                     navigate("ImageFromCollection", { img: imageLink })
                   }
                 >
-                  <Image
-                    style={styles.image}
-                    source={{ uri: `${imageLink.img}` }}
-                  />
+                  <Image style={image} source={{ uri: `${imageLink.img}` }} />
                 </TouchableOpacity>
               );
             })}
@@ -50,54 +50,16 @@ class Collection extends Component {
       </View>
     );
   }
+
   componentDidMount() {
     this.retrievePics().then(images => {
-      if (images) this.setState({ images, loading: false });
-      else this.setState({ loading: false });
+      this.setState({ images, loading: false });
     });
   }
 
   retrievePics = async () => {
-    const { currentUser } = this.props.screenProps;
-
-    let images = await api.getPics(currentUser);
-
-    return images;
+    return await api.getPics(this.props.screenProps.currentUser);
   };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-
-    justifyContent: "flex-start",
-    flexWrap: "wrap",
-    backgroundColor: "#fff"
-  },
-  text: {
-    alignSelf: "center"
-  },
-  image: {
-    margin: 10,
-
-    width: 160,
-    height: 160
-  },
-
-  navBarText: {
-    backgroundColor: "#63cdda",
-    color: "white",
-    fontSize: 16,
-    fontWeight: "700",
-    textAlign: "center",
-    paddingTop: 20,
-    paddingBottom: 10
-  },
-  horizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10
-  }
-});
 
 export default Collection;
