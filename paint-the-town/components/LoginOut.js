@@ -5,6 +5,7 @@ import {
   FormInput,
   FormValidationMessage
 } from "react-native-elements";
+import PropTypes from 'prop-types';
 import * as api from "../utils/api";
 import { Font } from "expo";
 import { loginStyles } from "../styles";
@@ -154,5 +155,13 @@ class LoginOut extends Component {
     }
   };
 }
+
+LoginOut.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  screenProps: {
+    currentUser: PropTypes.string.isRequired,
+    updateUser: PropTypes.func.isRequired
+  }
+};
 
 export default LoginOut;

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, Switch, Text } from "react-native";
+import PropTypes from 'prop-types';
 import { MapView } from "expo";
 import ActionButt from "./ActionButt";
 import * as tracker from "../utils/Tracker";
@@ -41,7 +42,6 @@ class Tracker extends Component {
       }
     });
     let journey = this.props.navigation.getParam("journey");
-    console.log(journey);
     if (journey)
       this.setState({
         route: journey.route,
@@ -139,7 +139,7 @@ class Tracker extends Component {
       let newObj = { latLng: [object], colour, width: this.state.width };
       route.push(newObj);
       this.setState({
-        route: updatedRoute,
+        route,
         colour
       });
     } else {
@@ -287,5 +287,12 @@ class Tracker extends Component {
     }
   };
 }
+
+Tracker.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  screenProps: {
+    currentUser: PropTypes.string.isRequired
+  }
+};
 
 export default Tracker;

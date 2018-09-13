@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { _ } from "lodash";
 import * as api from "../utils/api";
+import PropTypes from 'prop-types';
 import { collectionStyles } from "../styles.js";
 
 class Collection extends Component {
@@ -32,21 +33,21 @@ class Collection extends Component {
             You haven't recorded any journeys yet!
           </Text>
         ) : (
-          <ScrollView contentContainerStyle={container}>
-            {_.map(Object.values(images).reverse(), imageLink => {
-              return (
-                <TouchableOpacity
-                  key={imageLink.id}
-                  onPress={() =>
-                    navigate("ImageFromCollection", { img: imageLink })
-                  }
-                >
-                  <Image style={image} source={{ uri: `${imageLink.img}` }} />
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        )}
+              <ScrollView contentContainerStyle={container}>
+                {_.map(Object.values(images).reverse(), imageLink => {
+                  return (
+                    <TouchableOpacity
+                      key={imageLink.id}
+                      onPress={() =>
+                        navigate("ImageFromCollection", { img: imageLink })
+                      }
+                    >
+                      <Image style={image} source={{ uri: `${imageLink.img}` }} />
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
+            )}
       </View>
     );
   }
@@ -61,5 +62,12 @@ class Collection extends Component {
     return await api.getPics(this.props.screenProps.currentUser);
   };
 }
+
+Collection.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  screenProps: {
+    currentUser: PropTypes.string.isRequired
+  }
+};
 
 export default Collection;

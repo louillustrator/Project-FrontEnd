@@ -9,7 +9,6 @@ import LoginOut from "./components/LoginOut";
 import ImageFromCollection from "./components/ImageFromCollection";
 import config from "./config";
 import firebase from "firebase";
-
 import _ from "lodash";
 
 firebase.initializeApp(config);

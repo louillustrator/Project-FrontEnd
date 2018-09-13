@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Image, Text, View, TouchableHighlight } from "react-native";
 import * as api from "../utils/api";
+import PropTypes from 'prop-types';
 import { universalStyles, imageStyles } from "../styles.js";
 import { Font } from "expo";
 
@@ -12,7 +13,6 @@ class ImageFromCollection extends Component {
     const { image } = imageStyles;
     const { button, text } = universalStyles;
     let { img } = this.props.navigation.getParam("img");
-
     return (
       <View>
         <Image style={image} source={{ uri: img }} />
@@ -41,5 +41,9 @@ class ImageFromCollection extends Component {
     api.getJourney(id).then(journey => navigate("Tracker", { journey }));
   };
 }
+
+ImageFromCollection.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
 
 export default ImageFromCollection;

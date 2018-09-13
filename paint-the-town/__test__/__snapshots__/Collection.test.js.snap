@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`Polylines renders correctly 1`] = `
 <View>
   <Text
     accessible={true}
@@ -20,88 +20,11 @@ exports[`renders correctly 1`] = `
   >
     My Gallery
   </Text>
-  <RCTScrollView
-    contentContainerStyle={
-      Object {
-        "backgroundColor": "#fff",
-        "flexDirection": "row",
-        "flexWrap": "wrap",
-        "justifyContent": "flex-start",
-      }
-    }
-  >
-    <View>
-      <Image
-        source={1}
-        style={
-          Object {
-            "height": 160,
-            "margin": 10,
-            "width": 160,
-          }
-        }
-      />
-      <Image
-        source={1}
-        style={
-          Object {
-            "height": 160,
-            "margin": 10,
-            "width": 160,
-          }
-        }
-      />
-      <Image
-        source={1}
-        style={
-          Object {
-            "height": 160,
-            "margin": 10,
-            "width": 160,
-          }
-        }
-      />
-      <Image
-        source={1}
-        style={
-          Object {
-            "height": 160,
-            "margin": 10,
-            "width": 160,
-          }
-        }
-      />
-      <Image
-        source={1}
-        style={
-          Object {
-            "height": 160,
-            "margin": 10,
-            "width": 160,
-          }
-        }
-      />
-      <Image
-        source={1}
-        style={
-          Object {
-            "height": 160,
-            "margin": 10,
-            "width": 160,
-          }
-        }
-      />
-      <Image
-        source={1}
-        style={
-          Object {
-            "height": 160,
-            "margin": 10,
-            "width": 160,
-          }
-        }
-      />
-    </View>
-  </RCTScrollView>
+  <ActivityIndicator
+    animating={true}
+    color="#fa8231"
+    hidesWhenStopped={true}
+    size="small"
+  />
 </View>
 `;

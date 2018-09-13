@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text } from "react-native";
+import PropTypes from 'prop-types';
 import Slider from 'react-native-slider';
 
 class WidthPicker extends Component {
-    state={
+    state = {
         width: 0
     }
     render() {
         return (
-          <View style={styles.container}>
-          
-          <Slider 
-          style={styles.slider}
-          value={this.state.width}
-          step={1}
-          minimumValue={0}
-          maximumValue={10}
-          onValueChange={width => this.setState({width})}
-          onSlidingComplete={this.slidingComplete}
-          />
-          <Text style={styles.text}>{this.state.width}</Text>
-          </View>
+            <View style={styles.container}>
+
+                <Slider
+                    style={styles.slider}
+                    value={this.state.width}
+                    step={1}
+                    minimumValue={0}
+                    maximumValue={10}
+                    onValueChange={width => this.setState({ width })}
+                    onSlidingComplete={this.slidingComplete}
+                />
+                <Text style={styles.text}>{this.state.width}</Text>
+            </View>
         );
     }
 
@@ -39,19 +40,25 @@ class WidthPicker extends Component {
 const styles = StyleSheet.create({
     container: {
         height: 150,
-        justifyContent: 'center',    
+        justifyContent: 'center',
         marginLeft: 30,
         marginRight: 30,
         zIndex: 10,
         backgroundColor: 'rgba(52, 52, 52, 0.0)'
     },
     text: {
-      fontSize: 30,
-      textAlign: 'center',
+        fontSize: 30,
+        textAlign: 'center',
     },
     slider: {
         width: 200
-      },
-  });
+    },
+});
+
+WidthPicker.propTypes = {
+    currentWidth: PropTypes.number.isRequired,
+    setShowSlider: PropTypes.func.isRequired,
+    setWidth: PropTypes.func.isRequired
+};
 
 export default WidthPicker;

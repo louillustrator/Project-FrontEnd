@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Text, View, TouchableHighlight, Image } from "react-native";
+import PropTypes from 'prop-types';
 import { Font } from "expo";
 import { universalStyles, homeStyles } from "../styles.js";
 
@@ -59,5 +60,13 @@ class HomeScreen extends Component {
     this.props.navigation.navigate("LoginOut");
   };
 }
+
+HomeScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  screenProps: {
+    currentUser: PropTypes.string.isRequired,
+    updateUser: PropTypes.func.isRequired
+  }
+};
 
 export default HomeScreen;
