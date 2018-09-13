@@ -1,10 +1,9 @@
-import { StyleSheet } from "react-native";
-import { Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 export const universalStyles = StyleSheet.create({
   text: {
-    fontFamily: "Avenir"
+    fontFamily: Platform.OS === "android" ? "sans-serif" : "Avenir"
   },
   button: {
     alignItems: "center",
@@ -65,7 +64,7 @@ export const homeStyles = StyleSheet.create({
   logText: {
     color: "white",
     fontSize: 16,
-    fontFamily: "raleway-regular"
+    fontFamily: Platform.OS === "android" ? "sans-serif" : "raleway-regular"
   },
   login: {
     alignSelf: "flex-end",
@@ -121,9 +120,12 @@ export const loginStyles = StyleSheet.create({
   text: {
     color: "white",
     padding: 10,
-    fontFamily: "raleway-regular"
+    fontFamily: Platform.OS === "android" ? "sans-serif" : "raleway-regular"
   },
-  grey: { color: "#898989", fontFamily: "raleway-regular" }
+  grey: {
+    color: "#898989",
+    fontFamily: Platform.OS === "android" ? "sans-serif" : "raleway-regular"
+  }
 });
 
 export const trackerStyles = StyleSheet.create({
