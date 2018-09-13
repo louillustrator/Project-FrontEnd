@@ -41,7 +41,6 @@ class Tracker extends Component {
       }
     });
     let journey = this.props.navigation.getParam("journey");
-    console.log(journey);
     if (journey)
       this.setState({
         route: journey.route,
@@ -139,7 +138,7 @@ class Tracker extends Component {
       let newObj = { latLng: [object], colour, width: this.state.width };
       route.push(newObj);
       this.setState({
-        route: updatedRoute,
+        route,
         colour
       });
     } else {
