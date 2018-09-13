@@ -1,15 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Dimensions, Switch, Text } from "react-native";
+import { View, Dimensions, Switch, Text } from "react-native";
 import { MapView } from "expo";
 import ButtAction from "./ButtAction";
 import * as tracker from "../utils/Tracker";
 import Polylines from "./Polylines";
 import * as api from "../utils/api";
 import { takeSnapshotAsync } from "expo";
-import exportStyles from "../styles";
-import WidthPicker from './WidthPicker';
-
-const { width, height } = Dimensions.get("window");
+import { trackerStyles } from "../styles";
+import WidthPicker from "./WidthPicker";
 
 class Tracker extends Component {
   state = {
@@ -30,7 +28,7 @@ class Tracker extends Component {
     toggle: false,
     showSlider: false
   };
-  //getting current user postion at the start and setting region in state with it
+
   componentDidMount = async () => {
     let location = await this._getLocationAsync();
     this.setState({
@@ -46,103 +44,129 @@ class Tracker extends Component {
       this.setState({
         route: journey.route
       });
-  }
+  };
 
   _getLocationAsync = tracker._getLocationAsync.bind(this);
   _watchPosition = tracker._watchPosition.bind(this);
 
   render() {
+    const {
+      container,
+      navBar,
+      navBarText,
+      text,
+      map,
+      butt,
+      toggleButt
+    } = trackerStyles;
+    const {
+      toggle,
+      region,
+      blueDot,
+      route,
+      colour,
+      width,
+      showSlider
+    } = this.state;
+
     return (
-      <View style={styles.container}>
-        <View style={styles.navBar}>
-          <Text style={styles.navBarText}>My Journey</Text>
+      <View style={container}>
+        <View style={navBar}>
+          <Text style={navBarText}>My Journey</Text>
         </View>
 
-        <View style={styles.toggle}>
-          <Switch onValueChange={this.toggle} value={this.state.toggle} />
-          <Text style={styles.text}>Satellite View</Text>
+        <View style={toggleButt}>
+          <Switch onValueChange={this.toggle} value={toggle} />
+          <Text style={text}>Satellite View</Text>
         </View>
 
         <MapView
           collapsable={false}
-          style={styles.map}
+          style={map}
           ref="routeMap"
-          region={this.state.region}
-          showsUserLocation={this.state.blueDot}
+          region={region}
+          showsUserLocation={blueDot}
           showsMyLocationButton={true}
           showsCompass={true}
           followUserLocation={true}
           zoomEnabled={true}
           onRegionChangeComplete={this.setZoom}
           rotateEnabled={true}
-          mapType={this.state.toggle ? "satellite" : "standard"}
+          mapType={toggle ? "satellite" : "standard"}
         >
-          <Polylines route={this.state.route} />
+          <Polylines route={route} />
         </MapView>
-        {this.state.showSlider && <WidthPicker setShowSlider={this.setShowSlider} setWidth={this.setWidth} currentWidth={this.state.width}/>}
+        {showSlider && (
+          <WidthPicker
+            setShowSlider={this.setShowSlider}
+            setWidth={this.setWidth}
+            currentWidth={width}
+          />
+        )}
         <ButtAction
-          style={styles.butt}
+          style={butt}
           changeColour={this.changeColour}
           navigation={this.props.navigation}
-          colour={this.state.colour}
+          colour={colour}
           start={this.start}
           pause={this.pause}
           stop={this.stop}
           setShowSlider={this.setShowSlider}
         />
-        {/* <Text>{_haversine(this.state.route)}</Text> */}
       </View>
     );
   }
 
-  changeColour = async (colour) => {
+  changeColour = async colour => {
+    const { watching, route, width } = this.state;
+
     this.props.navigation.navigate("Tracker");
-    if(this.state.watching) {
+    if (watching) {
       let location = await this._getLocationAsync();
       let object = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         timestamp: location.timestamp
       };
-      let route = [...this.state.route]
-      let currentObj = {...route[route.length -1]}
-      let latLng = [...currentObj.latLng, object]
-      currentObj.latLng = latLng
-      route[route.length-1] = currentObj
-      let newObj = { latLng: [object], colour, width: this.state.width };
-      route.push(newObj)
+      let updatedRoute = [...route];
+      let currentObj = { ...updatedRoute[updatedRoute.length - 1] };
+      let latLng = [...currentObj.latLng, object];
+      currentObj.latLng = latLng;
+      updatedRoute[updatedRoute.length - 1] = currentObj;
+      let newObj = { latLng: [object], colour, width: width };
+      updatedRoute.push(newObj);
       this.setState({
-        route,
+        route: updatedRoute,
         colour
       });
     } else {
-    let route = [...this.state.route]
-    let currentObj = {...route[route.length -1]}
-    currentObj.colour = colour
-    route[route.length-1] = currentObj
-      this.setState({
-        route,
-        colour
-      })
+      let updatedRoute = [...route];
+      let currentObj = { ...updatedRoute[updatedRoute.length - 1] };
+      currentObj.colour = colour;
+      updatedRoute[updatedRoute.length - 1] = currentObj;
+      this.setState({ route: updatedRoute, colour });
     }
-    
   };
 
   pause = async () => {
     this._watchPosition(0);
-    let location = await this._getLocationAsync()
+    let location = await this._getLocationAsync();
     let object = {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
       timestamp: location.timestamp
     };
-    let route = [...this.state.route]
-    let currentObj = {...route[route.length -1]}
-    let latLng = [...currentObj.latLng, object]
-    currentObj.latLng = latLng
-    route[route.length-1] = currentObj
-    let newObj = { latLng: [], colour: this.state.colour, width: this.state.width };
-    route.push(newObj)
+    let route = [...this.state.route];
+    let currentObj = { ...route[route.length - 1] };
+    let latLng = [...currentObj.latLng, object];
+    currentObj.latLng = latLng;
+    route[route.length - 1] = currentObj;
+    let newObj = {
+      latLng: [],
+      colour: this.state.colour,
+      width: this.state.width
+    };
+    route.push(newObj);
     this.setState({
       route,
       watching: false
@@ -150,17 +174,17 @@ class Tracker extends Component {
   };
 
   start = async () => {
-    let location = await this._getLocationAsync()
+    let location = await this._getLocationAsync();
     let object = {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
       timestamp: location.timestamp
     };
-    let route = [...this.state.route]
-    let currentObj = {...route[route.length -1]}
-    let latLng = [...currentObj.latLng, object]
-    currentObj.latLng = latLng
-    route[route.length-1] = currentObj
+    let route = [...this.state.route];
+    let currentObj = { ...route[route.length - 1] };
+    let latLng = [...currentObj.latLng, object];
+    currentObj.latLng = latLng;
+    route[route.length - 1] = currentObj;
     this._watchPosition(1);
     this.setState({
       route,
@@ -198,11 +222,6 @@ class Tracker extends Component {
   };
 
   setZoom = region => {
-    // let currentRegion = {
-    //   ...this.state.region,
-    //   latitudeDelta: region.latitudeDelta,
-    //   longitudeDelta: region.longitudeDelta
-    // };
     this.setState({
       region
     });
@@ -210,90 +229,42 @@ class Tracker extends Component {
 
   toggle = () => this.setState({ toggle: !this.state.toggle });
 
-  setShowSlider = (val) => {
+  setShowSlider = val => {
     this.setState({
       showSlider: val
-    })
-  }
+    });
+  };
 
-  setWidth = async (width) => {
-    if(this.state.watching) {
+  setWidth = async width => {
+    if (this.state.watching) {
       let location = await this._getLocationAsync();
       let object = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         timestamp: location.timestamp
       };
-      let route = [...this.state.route]
-      let currentObj = {...route[route.length -1]}
-      let latLng = [...currentObj.latLng, object]
-      currentObj.latLng = latLng
-      route[route.length-1] = currentObj
+      let route = [...this.state.route];
+      let currentObj = { ...route[route.length - 1] };
+      let latLng = [...currentObj.latLng, object];
+      currentObj.latLng = latLng;
+      route[route.length - 1] = currentObj;
       let newObj = { latLng: [object], colour: this.state.colour, width };
-      route.push(newObj)
+      route.push(newObj);
       this.setState({
         route,
         width
       });
     } else {
-    let route = [...this.state.route]
-    let currentObj = {...route[route.length -1]}
-    currentObj.width = width
-    route[route.length-1] = currentObj
+      let route = [...this.state.route];
+      let currentObj = { ...route[route.length - 1] };
+      currentObj.width = width;
+      route[route.length - 1] = currentObj;
       this.setState({
         route,
         width
-      })
+      });
     }
-  }
+  };
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  navBar: {
-    backgroundColor: "#63cdda",
-    height: 50,
-    width: width,
-    position: "absolute"
-  },
-  navBarText: {
-    color: "white",
-    fontSize: 16,
-    top: 15,
-    fontWeight: "700",
-    textAlign: "center"
-  },
-  text: {
-    fontSize: 13,
-    padding: 5,
-    fontStyle: "italic"
-  },
-  map: {
-    top: 90,
-    flex: 0.7,
-    width: width,
-    height: height
-  },
-  butt: {
-    position: "absolute",
-    width: 20,
-    height: 20,
-    top: 10,
-    left: 10,
-    zIndex: 10
-  },
-  toggle: {
-    position: "relative",
-    top: 65,
-    flexDirection: "row",
-    flexWrap: "wrap"
-  }
-});
 
 export default Tracker;

@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 export const universalStyles = StyleSheet.create({
   text: {
@@ -124,4 +124,52 @@ export const loginStyles = StyleSheet.create({
     fontFamily: "raleway-regular"
   },
   grey: { color: "#898989", fontFamily: "raleway-regular" }
+});
+
+export const trackerStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+
+    alignItems: "center",
+    backgroundColor: "#F5FCFF"
+  },
+  navBar: {
+    backgroundColor: "#63cdda",
+    height: 50,
+    width: width,
+    position: "absolute"
+  },
+  navBarText: {
+    color: "white",
+    fontSize: 16,
+    top: 15,
+    fontWeight: "700",
+    textAlign: "center"
+  },
+  text: {
+    fontSize: 13,
+    padding: 5,
+    fontStyle: "italic"
+  },
+  map: {
+    top: 90,
+    flex: 0.7,
+    width: width,
+    height: height
+  },
+  butt: {
+    position: "absolute",
+    width: 20,
+    height: 20,
+    top: 10,
+    left: 10,
+    zIndex: 10
+  },
+  toggleButt: {
+    position: "relative",
+    top: 65,
+    flexDirection: "row",
+    flexWrap: "wrap"
+  }
 });
