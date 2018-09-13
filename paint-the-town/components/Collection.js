@@ -33,7 +33,7 @@ class Collection extends Component {
           </Text>
         ) : (
           <ScrollView contentContainerStyle={container}>
-            {_.map(Object.values(images), imageLink => {
+            {_.map(Object.values(images).reverse(), imageLink => {
               return (
                 <TouchableOpacity
                   key={imageLink.id}
