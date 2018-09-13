@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { View, Dimensions, Switch, Text } from "react-native";
+import { View, Switch, Text } from "react-native";
 import { MapView } from "expo";
-import ButtAction from "./ButtAction";
+import ActionButt from "./ActionButt";
 import * as tracker from "../utils/Tracker";
 import Polylines from "./Polylines";
 import * as api from "../utils/api";
@@ -26,7 +26,8 @@ class Tracker extends Component {
     colour: "#3600ff",
     blueDot: true,
     toggle: false,
-    showSlider: false
+    showSlider: false,
+    loadedMap: false
   };
 
   componentDidMount = async () => {
@@ -40,9 +41,11 @@ class Tracker extends Component {
       }
     });
     let journey = this.props.navigation.getParam("journey");
+    console.log(journey);
     if (journey)
       this.setState({
-        route: journey.route
+        route: journey.route,
+        loadedMap: true
       });
   };
 
@@ -103,7 +106,7 @@ class Tracker extends Component {
             currentWidth={width}
           />
         )}
-        <ButtAction
+        <ActionButt
           style={butt}
           changeColour={this.changeColour}
           navigation={this.props.navigation}
@@ -118,7 +121,7 @@ class Tracker extends Component {
   }
 
   changeColour = async colour => {
-    const { watching, route, width } = this.state;
+    const { watching, width } = this.state;
 
     this.props.navigation.navigate("Tracker");
     if (watching) {
@@ -128,23 +131,26 @@ class Tracker extends Component {
         longitude: location.coords.longitude,
         timestamp: location.timestamp
       };
-      let updatedRoute = [...route];
-      let currentObj = { ...updatedRoute[updatedRoute.length - 1] };
+      let route = [...this.state.route];
+      let currentObj = { ...route[route.length - 1] };
       let latLng = [...currentObj.latLng, object];
       currentObj.latLng = latLng;
-      updatedRoute[updatedRoute.length - 1] = currentObj;
-      let newObj = { latLng: [object], colour, width: width };
-      updatedRoute.push(newObj);
+      route[route.length - 1] = currentObj;
+      let newObj = { latLng: [object], colour, width: this.state.width };
+      route.push(newObj);
       this.setState({
         route: updatedRoute,
         colour
       });
     } else {
-      let updatedRoute = [...route];
-      let currentObj = { ...updatedRoute[updatedRoute.length - 1] };
+      let route = [...this.state.route];
+      let currentObj = { ...route[route.length - 1] };
       currentObj.colour = colour;
-      updatedRoute[updatedRoute.length - 1] = currentObj;
-      this.setState({ route: updatedRoute, colour });
+      route[route.length - 1] = currentObj;
+      this.setState({
+        route,
+        colour
+      });
     }
   };
 
@@ -181,15 +187,30 @@ class Tracker extends Component {
       timestamp: location.timestamp
     };
     let route = [...this.state.route];
-    let currentObj = { ...route[route.length - 1] };
-    let latLng = [...currentObj.latLng, object];
-    currentObj.latLng = latLng;
-    route[route.length - 1] = currentObj;
-    this._watchPosition(1);
-    this.setState({
-      route,
-      watching: true
-    });
+    if (!this.state.loadedMap) {
+      let currentObj = { ...route[route.length - 1] };
+      let latLng = [...currentObj.latLng, object];
+      currentObj.latLng = latLng;
+      route[route.length - 1] = currentObj;
+      this._watchPosition(1);
+      this.setState({
+        route,
+        watching: true
+      });
+    } else {
+      let newObj = {
+        latLng: [object],
+        colour: this.state.colour,
+        width: this.state.width
+      };
+      route = [...route, newObj];
+      this._watchPosition(1);
+      this.setState({
+        route,
+        loadedMap: false,
+        watching: true
+      });
+    }
   };
 
   stop = async () => {
@@ -217,7 +238,7 @@ class Tracker extends Component {
       format: "jpeg"
     });
     api.storePic(newPic, newID, currentUser);
-
+    this.props.navigation.navigate("Collection");
     this.setState({ blueDot: true });
   };
 

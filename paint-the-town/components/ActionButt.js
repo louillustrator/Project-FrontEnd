@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import ActionButton from "react-native-circular-action-menu";
 import Icon from "react-native-vector-icons/Ionicons";
 
-const ButtAction = ({
+const ActionButt = ({
   colour,
   navigation,
   changeColour,
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
     zIndex: 10
   }
 });
-export default ButtAction;
+export default ActionButt;
