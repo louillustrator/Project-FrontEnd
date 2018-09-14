@@ -290,9 +290,10 @@ class Tracker extends Component {
 
 Tracker.propTypes = {
   navigation: PropTypes.object.isRequired,
-  screenProps: {
-    currentUser: PropTypes.string.isRequired
-  }
+  screenProps: PropTypes.shape({
+    currentUser: PropTypes.string.isRequired,
+    updateUser: PropTypes.func.isRequired
+  })
 };
 
-export default Tracker;
+export default Tracker; 

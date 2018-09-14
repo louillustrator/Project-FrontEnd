@@ -65,9 +65,10 @@ class Collection extends Component {
 
 Collection.propTypes = {
   navigation: PropTypes.object.isRequired,
-  screenProps: {
-    currentUser: PropTypes.string.isRequired
-  }
+  screenProps: PropTypes.shape({
+    currentUser: PropTypes.string.isRequired,
+    updateUser: PropTypes.func.isRequired
+  })
 };
 
 export default Collection;

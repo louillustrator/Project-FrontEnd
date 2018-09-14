@@ -63,10 +63,10 @@ class HomeScreen extends Component {
 
 HomeScreen.propTypes = {
   navigation: PropTypes.object.isRequired,
-  screenProps: {
+  screenProps: PropTypes.shape({
     currentUser: PropTypes.string.isRequired,
     updateUser: PropTypes.func.isRequired
-  }
+  })
 };
 
 export default HomeScreen;
